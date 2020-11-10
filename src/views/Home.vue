@@ -1,94 +1,136 @@
 <template>
-<div>
+  <div>
+    <div class="pag_header">
+      <v-container>
+        <h1>Las mejores cervezas artesanales, directo a tu puerta</h1>
+      </v-container>
+    </div>
     <!--CARRUSEL -->
-    <v-carousel cycle height="400" hide-delimiter-background show-arrows-on-hover>
-        <v-carousel-item v-for="(slide, i) in slides" :key="i">
-            <v-sheet :color="colors[i]" height="100%">
-                <v-row class="fill-height" align="center" justify="center">
-                    <v-img src="https://st4.depositphotos.com/5389310/19992/v/1600/depositphotos_199920628-stock-illustration-wheat-beer-ads-flying-ingredients.jpg" width="100%"></v-img>
-                </v-row>
-            </v-sheet>
-        </v-carousel-item>
+    <v-carousel cycle hide-delimiters show-arrows-on-hover>
+      <v-carousel-item
+        v-for="(slide, i) in slides"
+        :key="i"
+        src="https://st4.depositphotos.com/5389310/19992/v/1600/depositphotos_199920628-stock-illustration-wheat-beer-ads-flying-ingredients.jpg"
+        height="200"
+        link
+        to="/Packs/Promociondestacada"
+      >
+        <template v-slot:placeholder>
+          <v-row class="fill-height ma-0" align="center" justify="center">
+            <v-progress-circular
+              indeterminate
+              color="grey lighten-5"
+            ></v-progress-circular>
+          </v-row>
+        </template>
+      </v-carousel-item>
     </v-carousel>
 
-    <v-container class="pa-7 pa-md-1">
-        <!-- SLIDES -->
+    <v-container class="pa-7 pa-md-1 mx-auto">
+      <!-- SLIDES -->
 
-        <h1 class="text-center">Cervezas nuevas:</h1>
+      <h2 class="text-center">Cervezas nuevas</h2>
 
-        <v-slide-group class="main_slide pa-4">
-            <v-slide-item v-for="n in 15" :key="n">
-                <router-link to="/">
-                    <v-card class="ma-4 rounded-xl elevation-5" max-width="250" dark>
-                        <v-img src="https://cdn-b.william-reed.com/var/wrbm_gb_hospitality/storage/images/publications/hospitality/bighospitality.co.uk/article/2018/04/26/beer-quiz-25-questions-to-test-your-knowledge/2807204-1-eng-GB/Beer-quiz-25-questions-to-test-your-knowledge_wrbm_large.jpg" height="200px"></v-img>
-                        <v-card-title>{{n}} Top western road trips </v-card-title>
-                        <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="orange lighten-2" text> Explore </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </router-link>
-            </v-slide-item>
-        </v-slide-group>
+      <v-slide-group class="main_slide pa-4">
+        <v-slide-item v-for="n in 15" :key="n">
+          <Card
+            class="componente_card"
+            imagen="https://cdn-b.william-reed.com/var/wrbm_gb_hospitality/storage/images/publications/hospitality/bighospitality.co.uk/article/2018/04/26/beer-quiz-25-questions-to-test-your-knowledge/2807204-1-eng-GB/Beer-quiz-25-questions-to-test-your-knowledge_wrbm_large.jpg"
+            titulo="Nombre de la cerveza"
+            estilo="American Pale Ale"
+            descripcion="Una cerveza IPA para disfrutar en las calurosas tardes de verano"
+            precio="1990"
+            enlace="/Cervezas/Marca/Estilo"
+          />
+        </v-slide-item>
+      </v-slide-group>
 
-        <h1 class="text-center">Cervezas destacadas:</h1>
-        <v-slide-group class="main_slide pa-4">
-            <v-slide-item v-for="n in 15" :key="n">
-                <v-card class="ma-4 rounded-xl elevation-5" max-width="250" dark>
-                    <v-img src="https://bcnfoodieguide.com/wp-content/uploads/2015/03/BeFunky_craft-beer-portada1.jpg1_.jpg" height="200px"></v-img>
-                    <v-card-title>{{n}} Top western road trips </v-card-title>
-                    <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="orange lighten-2" text> Explore </v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-slide-item>
-        </v-slide-group>
+      <v-divider light class="my-15" />
 
-        <h1 class="text-center">Promociones:</h1>
-        <v-slide-group class="main_slide pa-4">
-            <v-slide-item v-for="n in 15" :key="n">
-                <v-card class="ma-4 rounded-xl elevation-5" max-width="250" dark>
-                    <v-img src="https://st4.depositphotos.com/5389310/19992/v/1600/depositphotos_199920628-stock-illustration-wheat-beer-ads-flying-ingredients.jpg" height="200px"></v-img>
-                    <v-card-title> {{n}}Top western road trips </v-card-title>
-                    <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="orange lighten-2" text> Explore </v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-slide-item>
-        </v-slide-group>
+      <h2 class="text-center">Cervecerías</h2>
+      <v-slide-group class="main_slide pa-4">
+        <v-slide-item v-for="n in 15" :key="n">
+          <router-link to="/Cervezas/Cerveceria">
+            <v-img
+              class="card_home cerveceria_img ma-4 rounded-xl"
+              src="https://www.cuellonegro.cl/wp-content/uploads/2017/05/logo_web.png"
+              alt="logo cervecería"
+            ></v-img>
+          </router-link>
+        </v-slide-item>
+      </v-slide-group>
+
+      <v-divider light class="my-15" />
+
+      <h2 class="text-center">Packs</h2>
+      <v-slide-group class="main_slide pa-4">
+        <v-slide-item v-for="n in 15" :key="n">
+          <Card
+            class="componente_card"
+            imagen="https://www.cervezabyra.com/shop/109-large_default/craft-beer-byra-alphabet-collection-pack-12ud.jpg"
+            titulo="4PACK MIXTO"
+            descripcion="Una variedad de sabores para vivir una experiencia cervecera única"
+            precio="10000"
+            enlace="/Packs/DetallePack"
+          />
+        </v-slide-item>
+      </v-slide-group>
+
+      <v-divider light class="my-15" />
+
+      <div class="text-center py-5">
+        <v-btn class="text-center" to="/Cervezas" x-large dark elevation="5"
+          >Ver todas las cervezas <v-icon>mdi-beer</v-icon>
+        </v-btn>
+      </div>
+      <v-divider light class="my-15" />
     </v-container>
-</div>
+  </div>
 </template>
 
 <script>
 // @ is an alias to /src
+import Card from '@/components/Card'
 
 export default {
-    name: "Home",
-    components: {},
-    data() {
-        return {
-            //CAROUSEL DATA
-            colors: [
-                "indigo",
-                "warning",
-                "pink darken-2",
-                "red lighten-1",
-                "deep-purple accent-4",
-            ],
-            slides: ["First", "Second"],
-        };
-    },
-};
+  name: 'Home',
+  components: {
+      Card
+  },
+  data() {
+    return {
+      //CAROUSEL DATA
+      slides: ['First', 'Second'],
+    }
+  },
+  head() {
+    return {
+      title: 'Inicio',
+    }
+  },
+  computed: {
+  }
+}
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/scss/main.scss";
+
 .main_slide {
-    padding: 4rem auto;
+  padding: 4rem auto;
+
+  .cerveceria_img {
+    width: 150px;
+    transition: filter 0.5s;
+    filter: drop-shadow(0 0 2px $main-black);
+
+    &:hover {
+      filter: drop-shadow(0 0 5px $main-black);
+    }
+  }
+
+  .componente_card {
+    margin: 12px;
+  }
 }
 </style>

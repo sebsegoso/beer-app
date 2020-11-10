@@ -1,28 +1,38 @@
 <template>
-<v-bottom-navigation :value="1" color="#FFBA08" background-color="#000" grow dark id="Bottom_navbar">
-    <v-btn>
-        <span>Cervezas</span>
+<v-bottom-navigation :value="1" color="#FFBA08" background-color="$main-black" grow dark id="Bottom_navbar" class="rounded-t-xl">
 
-        <v-icon>mdi-beer</v-icon>
+    <v-btn to="/">
+        <span>Home</span>
+        <v-icon>mdi-home</v-icon>
+
     </v-btn>
 
+    <v-divider vertical></v-divider>
+
+    <v-btn to="/Cervezas">
+        <span>Cervezas</span>
+        <v-icon>mdi-glass-mug-variant</v-icon>
+    </v-btn>
+    <!--<v-divider vertical></v-divider>
     <v-btn>
         <span>Buscar</span>
 
         <v-icon>mdi-magnify</v-icon>
-    </v-btn>
+    </v-btn>-->
 
-    <v-btn>
+    <v-divider vertical></v-divider>
+
+    <v-btn to="/Carro">
         <span>Mi carro</span>
-
-        <v-badge :content="6" color="#000" bordered>
+        <v-badge :content="6" color="#16181e">
             <v-icon>mdi-cart</v-icon>
         </v-badge>
     </v-btn>
 
+    <v-divider vertical></v-divider>
+
     <v-btn>
         <span>Mi cuenta</span>
-
         <v-icon>mdi-account-circle</v-icon>
     </v-btn>
 
@@ -32,17 +42,32 @@
 <script>
 export default {
     name: 'Navbar',
-    data: () => {
 
-    }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+@import "@/assets/scss/main.scss";
+
 #Bottom_navbar {
     position: fixed;
     z-index: 999;
     height: 200px;
-    box-shadow: 0 0 20px #000;
+    box-shadow: 0 0 20px $main-black , 0 0 3px $main-white;
+    max-width: 100vw;
+    background-color: $main-black;
+
+    a {
+        text-decoration: none;
+        color: $main-white;
+
+        &:active {
+            color: $main-yellow;
+        }
+
+        &:focus {
+            color: $main-yellow;
+        }
+    }
 }
 </style>

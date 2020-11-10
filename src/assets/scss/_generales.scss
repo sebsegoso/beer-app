@@ -1,0 +1,28 @@
+//ESTILOS GENERALES
+* {
+    margin: 0;
+    box-sizing: border-box;
+    
+    a {
+        text-decoration: none;
+    }
+}
+
+#App{
+    background-color: $main-yellow;
+    color: $main-black;
+    font-family: 'Ubuntu' , sans-serif;
+
+}
+
+.pag_header {
+    background-color: #16181e;
+    color: #FFF;
+    min-height: 80px;
+    padding-top: 15px;
+    text-align: center;
+    width: 100vw;
+    div {
+        margin: 0 auto;
+    }
+}

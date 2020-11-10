@@ -1,0 +1,3 @@
+@mixin elevation {
+    filter: drop-shadow(0 0 2px $main-black);
+}

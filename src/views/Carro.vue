@@ -7,30 +7,16 @@
         <!--HEADER -->
         <v-row>
             <v-col cols="12" md="8">
-                <!--<v-row align="end" dense class="cart_header">
-                    <v-col cols="4" class="cart_header_description">
-                        <p>PRODUCTO</p>
-                    </v-col>
-                    <v-col cols="3" class="cart_header_quantity">
-                        <p>CANTIDAD</p>
-                    </v-col>
-                    <v-col cols="2" class="cart_header_price">
-                        <p>PRECIO UNIDAD</p>
-                    </v-col>
-                    <v-col cols="1" class="cart_header_delete">
-                        <p>ELIMINAR</p>
-                    </v-col>
-                </v-row>-->
                 <!--ITEMS-->
                 <div v-for="n in 7" :key="n" class="cart_item elevation-5 rounded-xl">
-                    <v-row class="cart_item_row">
-                        <v-col cols="4" class="cart_item_description">
+                    <div class="cart_item_row">
+                        <div>
                             <p>HASTA PRONTO</p>
                             <p>...y gracias por los lúpulos</p>
-                        </v-col>
+                        </div>
 
-                        <v-col cols="3" class="cart_item_quantity">
-                            <v-row justify="space-around" align="center">
+                        <div class="cart_item_quantity">
+                            <v-row justify="space-between" align="center">
                                 <v-btn fab dark x-small>
                                     <v-icon>mdi-minus</v-icon>
                                 </v-btn>
@@ -39,31 +25,18 @@
                                     <v-icon>mdi-plus</v-icon>
                                 </v-btn>
                             </v-row>
-                        </v-col>
+                        </div>
 
-                        <v-col cols="2" class="cart_item_price">
+                        <div class="cart_item_price">
                             <h4>$3800</h4>
-                        </v-col>
+                        </div>
 
-                        <v-col cols="1" class="cart_item_delete">
+                        <div class="cart_item_delete">
                             <v-btn x-small dark fab color="red">
                                 <v-icon>mdi-delete</v-icon>
                             </v-btn>
-                        </v-col>
-
-                        <v-col cols="4" class="cart_header">
-                            <p>PRODUCTO</p>
-                        </v-col>
-                        <v-col cols="3" class="cart_header">
-                            <p>CANTIDAD</p>
-                        </v-col>
-                        <v-col cols="2" class="cart_header">
-                            <p>PRECIO UNIDAD</p>
-                        </v-col>
-                        <v-col cols="1" class="cart_header">
-                            <p>ELIMINAR</p>
-                        </v-col>
-                    </v-row>
+                        </div>
+                    </div>
                 </div>
             </v-col>
             <!--TOTALES -->
@@ -186,11 +159,25 @@ export default {
 .cart_item {
     width: 100%;
     // min-height: 6rem;
-    padding: 5rem auto;
     background-color: $main-white;
     color: $main-black;
     margin: 1rem 0;
     font-size: $text-body;
+    padding: 1rem 0;
+
+    &_quantity {
+
+        span {
+            font-size: $text-title2;
+            padding: .25rem;
+            margin: 0 .25rem;
+
+        }
+    }
+
+    &_price {
+        font-size: $text-body;
+    }
 
     &_row {
         p {

@@ -25,6 +25,7 @@ const routes = [
   {
     path: '/cervezas/:cerveceria/:detallecerveza',
     name: 'DetalleCerveza',
+    props: true,
     component: () => import(/* webpackChunkName: "Carro" */ '../views/DetalleCerveza.vue')
   },
   {
@@ -36,6 +37,10 @@ const routes = [
     path: '/pedido-realizado',
     name: 'Pedido-realizado',
     component: () => import(/* webpackChunkName: "Pedido-realizado" */ '../views/Pedido-realizado.vue')
+  },{
+    path: '/admin',
+    name: 'Admin',
+    component: () => import(/* webpackChunkName: "admin" */ '../views/Admin.vue')
   },
 
 

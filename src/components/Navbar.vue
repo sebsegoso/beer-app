@@ -28,13 +28,13 @@
             <v-icon>mdi-cart</v-icon>
         </v-badge>
     </v-btn>
-
+    <!--
     <v-divider vertical></v-divider>
 
     <v-btn>
         <span>Mi cuenta</span>
         <v-icon>mdi-account-circle</v-icon>
-    </v-btn>
+    </v-btn>-->
 
 </v-bottom-navigation>
 </template>
@@ -53,7 +53,7 @@ export default {
     position: fixed;
     z-index: 999;
     height: 200px;
-    box-shadow: 0 0 20px $main-black , 0 0 3px $main-white;
+    box-shadow: 0 0 20px $main-black, 0 0 3px $main-white;
     max-width: 100vw;
     background-color: $main-black;
 

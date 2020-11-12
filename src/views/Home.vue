@@ -32,15 +32,15 @@
       <h2 class="text-center">Cervezas nuevas</h2>
 
       <v-slide-group class="main_slide pa-4">
-        <v-slide-item v-for="n in 15" :key="n">
+        <v-slide-item v-for="(cerveza, i) in cervezasNuevas" :key="i">
           <Card
-            class="componente_card"
-            imagen="https://cdn-b.william-reed.com/var/wrbm_gb_hospitality/storage/images/publications/hospitality/bighospitality.co.uk/article/2018/04/26/beer-quiz-25-questions-to-test-your-knowledge/2807204-1-eng-GB/Beer-quiz-25-questions-to-test-your-knowledge_wrbm_large.jpg"
-            titulo="Nombre de la cerveza"
-            estilo="American Pale Ale"
-            descripcion="Una cerveza IPA para disfrutar en las calurosas tardes de verano"
-            precio="1990"
-            enlace="/Cervezas/Marca/Estilo"
+            :imagen="cerveza.data.foto"
+            :titulo="cerveza.data.nombre"
+            :cerveceria="cerveza.data.cerveceria"
+            :estilo="cerveza.data.estilo"
+            :descripcion="cerveza.data.resena"
+            :precio="cerveza.data.precio"
+            :enlace="`/Cervezas/${cerveza.data.cerveceria}/${cerveza.data.path}`"
           />
         </v-slide-item>
       </v-slide-group>
@@ -89,28 +89,30 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 // @ is an alias to /src
-import Card from '@/components/Card'
+import Card from "@/components/Card";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
-      Card
+    Card,
   },
   data() {
     return {
       //CAROUSEL DATA
-      slides: ['First', 'Second'],
-    }
+      slides: ["First", "Second"],
+    };
   },
   head() {
     return {
-      title: 'Inicio',
-    }
+      title: "Inicio",
+    };
   },
   computed: {
-  }
-}
+    ...mapGetters("Products", ["cervezasNuevas"]),
+  },
+};
 </script>
 
 <style lang="scss" scoped>

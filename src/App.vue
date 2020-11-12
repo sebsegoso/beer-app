@@ -8,25 +8,32 @@
     <Footer />
     <!--NAVIGATION -->
     <Navbar />
-
 </v-app>
 </template>
 
 <script>
 import Footer from './components/Footer'
 import Navbar from './components/Navbar'
+
+import {
+    mapActions
+} from 'vuex'
 export default {
     name: 'App',
-
     components: {
         Footer,
         Navbar
     },
-
     data: () => ({
 
     }),
-};
+    methods: {
+        ...mapActions('Products', ['getData'])
+    },
+    created() {
+        this.getData()
+    }
+}
 </script>
 
 <style lang="scss">

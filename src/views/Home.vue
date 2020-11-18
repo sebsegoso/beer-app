@@ -32,16 +32,8 @@
       <h2 class="text-center">Cervezas nuevas</h2>
 
       <v-slide-group class="main_slide pa-4">
-        <v-slide-item v-for="(cerveza, i) in cervezasNuevas" :key="i">
-          <Card
-            :imagen="cerveza.data.foto"
-            :titulo="cerveza.data.nombre"
-            :cerveceria="cerveza.data.cerveceria"
-            :estilo="cerveza.data.estilo"
-            :descripcion="cerveza.data.resena"
-            :precio="cerveza.data.precio"
-            :enlace="`/Cervezas/${cerveza.data.cerveceria}/${cerveza.data.path}`"
-          />
+        <v-slide-item v-for="(cerveza, i) in cervezasNuevas" :key="i" class="px-3">
+          <Card :producto="cerveza" />
         </v-slide-item>
       </v-slide-group>
 
@@ -60,12 +52,12 @@
         </v-slide-item>
       </v-slide-group>
 
-      <v-divider light class="my-15" />
+      <!--<v-divider light class="my-15" />
 
       <h2 class="text-center">Packs</h2>
       <v-slide-group class="main_slide pa-4">
         <v-slide-item v-for="n in 15" :key="n">
-          <Card
+          <Card 
             class="componente_card"
             imagen="https://www.cervezabyra.com/shop/109-large_default/craft-beer-byra-alphabet-collection-pack-12ud.jpg"
             titulo="4PACK MIXTO"
@@ -74,7 +66,7 @@
             enlace="/Packs/DetallePack"
           />
         </v-slide-item>
-      </v-slide-group>
+      </v-slide-group>-->
 
       <v-divider light class="my-15" />
 
@@ -104,10 +96,8 @@ export default {
       slides: ["First", "Second"],
     };
   },
-  head() {
-    return {
-      title: "Inicio",
-    };
+  title() {
+    return `Las mejores cervezas artesanales directo a tu puerta`;
   },
   computed: {
     ...mapGetters("Products", ["cervezasNuevas"]),

@@ -37,11 +37,24 @@ const routes = [
     path: '/pedido-realizado',
     name: 'Pedido-realizado',
     component: () => import(/* webpackChunkName: "Pedido-realizado" */ '../views/Pedido-realizado.vue')
-  },{
+  },
+  {
     path: '/admin',
     name: 'Admin',
-    component: () => import(/* webpackChunkName: "admin" */ '../views/Admin.vue')
+    component: () => import(/* webpackChunkName: "admin" */ '../views/Admin/')
   },
+  {
+    path: '/admin/comentarios',
+    name: 'Comentarios',
+    component: () => import(/* webpackChunkName: "admin" */ '../views/Admin/Comentarios.vue')
+  },
+  {
+    path: '/admin/pedidos',
+    name: 'Pedidos',
+    component: () => import(/* webpackChunkName: "admin" */ '../views/Admin/Pedidos.vue')
+  }
+
+
 
 
 ]

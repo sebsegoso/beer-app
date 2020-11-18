@@ -6,8 +6,8 @@
     <v-container class="pag_body mx-auto pa-md-1">
         <v-img class="cerveceria_img" src="https://mossto.cl/wp-content/uploads/2020/08/mossto-05.png" />
         <v-row>
-            <v-col v-for="(n, i) in 16" :key="i" cols="6" :md="3" :xl="2">
-                <Card imagen="https://cdn-b.william-reed.com/var/wrbm_gb_hospitality/storage/images/publications/hospitality/bighospitality.co.uk/article/2018/04/26/beer-quiz-25-questions-to-test-your-knowledge/2807204-1-eng-GB/Beer-quiz-25-questions-to-test-your-knowledge_wrbm_large.jpg" titulo="Nombre de la cerveza" estilo="Foreign Extra Stout" descripcion="Una IPA para disfrutar en las calurosas tardes de verano" precio="2490" enlace="/Cervezas/Marca/Estilo" />
+            <v-col v-for="(cerveza, i) in filtroCerveceria" :key="i" cols="6" :md="3" :xl="2">
+                <Card :producto="cerveza" />
             </v-col>
         </v-row>
     </v-container>
@@ -15,9 +15,11 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 import Card from '@/components/Card'
 export default {
     name: "Cerveceria",
+    props: ['cerveceria'],
     components: {
         Card
     },
@@ -25,6 +27,17 @@ export default {
         return {};
     },
     methods: {},
+    computed: {
+        ...mapState('Products' , ['cervezas']),
+        filtroCerveceria(){
+            let path = this.cerveceria
+
+            return this.cervezas.filter(p => {
+                p.data.cerveceria.includes(path)
+            })
+        }
+
+    },
 };
 </script>
 

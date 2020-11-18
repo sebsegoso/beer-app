@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 import firebase from 'firebase'
 import Admin from './admin'
 import Products from './products'
+import Cart from './cart'
+import Feedback from './feedback'
 
 Vue.use(Vuex)
 
@@ -10,11 +12,19 @@ export default new Vuex.Store({
   state: {
   },
   mutations: {
+    
   },
   actions: {
-
+    
+  },
+  getters: {
+    precioEnMiles: () => (numero) => {
+      return numero
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
   },
   modules: {
-    Admin , Products
+    Admin, Products, Cart , Feedback
   }
 })

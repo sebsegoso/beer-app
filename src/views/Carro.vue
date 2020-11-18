@@ -1,198 +1,171 @@
 <template>
-<div>
+  <div>
     <div class="pag_header">
-        <h1>Mi carro</h1>
+      <h1>Mi carro</h1>
     </div>
     <v-container class="pag_body mx-auto py-4">
-        <!--HEADER -->
-        <v-row>
-            <v-col cols="12" md="8">
-                <!--ITEMS-->
-                <div v-for="n in 7" :key="n" class="cart_item elevation-5 rounded-xl">
-                    <div class="cart_item_row">
-                        <div>
-                            <p>HASTA PRONTO</p>
-                            <p>...y gracias por los lúpulos</p>
-                        </div>
+      <div v-if="this.carrito.length == 0" class="cart_empty d-flex align-center justify-center">
+        <h2  class="text-center">No hay productos agregados en tu carrito</h2>
+      </div>
+      <v-row v-else>
+        <!--ITEMS-->
+        <v-col cols="12" md="8">
+          <div
+            v-for="(producto, i) in carrito"
+            :key="i"
+            class="cart_item elevation-5 rounded-xl"
+          >
+            <div class="cart_item_row">
+              <div class="cart_item_name">
+                <p>{{ producto.data.cerveceria }}</p>
+                <p>{{ producto.data.nombre }}</p>
+              </div>
 
-                        <div class="cart_item_quantity">
-                            <v-row justify="space-between" align="center">
-                                <v-btn fab dark x-small>
-                                    <v-icon>mdi-minus</v-icon>
-                                </v-btn>
-                                <span>{{ n }}</span>
-                                <v-btn fab dark x-small>
-                                    <v-icon>mdi-plus</v-icon>
-                                </v-btn>
-                            </v-row>
-                        </div>
+              <div class="cart_item_quantity">
+                <v-row justify="space-between" align="center">
+                  <v-btn
+                    fab
+                    dark
+                    x-small
+                    @click="dismiuirCantidad(producto.id)"
+                    :disabled="producto.data.cantidad <= 1"
+                  >
+                    <v-icon>mdi-minus</v-icon>
+                  </v-btn>
+                  <span>{{ producto.data.cantidad }}</span>
+                  <v-btn
+                    fab
+                    dark
+                    x-small
+                    @click="sumarCantidad(producto.id)"
+                    :disabled="producto.data.cantidad >= producto.data.stock"
+                  >
+                    <v-icon>mdi-plus</v-icon>
+                  </v-btn>
+                </v-row>
+              </div>
 
-                        <div class="cart_item_price">
-                            <h4>$3800</h4>
-                        </div>
+              <div class="cart_item_price">
+                <h4>${{ precioEnMiles(producto.data.precio) }}</h4>
+              </div>
 
-                        <div class="cart_item_delete">
-                            <v-btn x-small dark fab color="red">
-                                <v-icon>mdi-delete</v-icon>
-                            </v-btn>
-                        </div>
-                    </div>
-                </div>
-            </v-col>
-            <!--TOTALES -->
-            <v-col class="pl-2">
-                <v-container class="cart_total elevation-5 rounded-l-xl pa-2">
-                    <h2>TOTAL</h2>
-                    <v-divider />
-                    <h5>Cantidad de productos:</h5>
-                    <v-divider />
-                    <h5>Subtotal:</h5>
-                    <h5 v-show="entrega">Envío:</h5>
-                    <h4>Total: $</h4>
-                    <v-divider />
-                    <v-container>
-                        <h5>Forma de entrega:</h5>
-                        <v-radio-group dark row v-model="entrega" mandatory>
-                            <v-radio label="Retiro" :value="false"></v-radio>
-                            <v-radio label="Despacho a domicilio" :value="true"></v-radio>
-                        </v-radio-group>
-                        <v-divider inset></v-divider>
-                        <h5>Datos cliente</h5>
-                        <v-text-field dark outlined dense label="Nombre" type="text"></v-text-field>
-                        <v-text-field dark outlined dense label="Apellidos" type="text"></v-text-field>
-                        <v-text-field dark outlined dense label="Teléfono de contacto" type="number" prefix="+56"></v-text-field>
-                        <v-divider inset></v-divider>
-                        <div v-show="entrega">
-                            <h5>Dirección de entrega</h5>
-                            <v-select dark dense outlined label="Comuna" :items="comunas"></v-select>
-                            <v-text-field dark outlined dense label="Calle" type="text"></v-text-field>
-                            <v-text-field dark outlined dense label="Número" type="number" prefix="#"></v-text-field>
-                            <v-text-field dark outlined dense label="Block o departamento" type="text"></v-text-field>
-                            <v-divider inset></v-divider>
-                        </div>
-                        <h5>Medio de pago</h5>
-                        <v-radio-group dark row mandatory>
-                            <v-radio label="Efectivo" :value="false"></v-radio>
-                            <v-radio label="Transferencia" :value="true"></v-radio>
-                        </v-radio-group>
-                        <v-divider inset></v-divider>
-                        <h5>Comentarios</h5>
-                        <v-textarea dark dense outlined rows="1" label="ej: Timbre malo, Casa roja, etc"></v-textarea>
-                    </v-container>
-                    <v-divider />
-                    <div class="text-center py-3">
-                        <v-btn x-large light color="#fff" @click="finalizar">Finalizar pedido</v-btn>
-                    </div>
-                </v-container>
-            </v-col>
-        </v-row>
+              <div class="cart_item_delete">
+                <v-btn
+                  x-small
+                  dark
+                  fab
+                  color="red"
+                  @click="quitarDelCarrito(producto.id)"
+                >
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </div>
+            </div>
+          </div>
+        </v-col>
+        <!--TOTALES -->
+        <v-col class="pl-2"> 
+          <Total />
+        </v-col>
+      </v-row>
     </v-container>
-</div>
+  </div>
 </template>
 
 <script>
+import { mapState, mapActions, mapGetters } from "vuex";
+import Total from '@/components/Total.vue'
 export default {
-    name: "Carro",
-    data() {
-        return {
-            entrega: null,
-            comunas: [
-                "Cerro Navia",
-                "Conchalí",
-                "Estación Central",
-                "Huechuraba",
-                "Independencia",
-                "La Cisterna",
-                "La Florida",
-                "La Reina",
-                "Las Condes",
-                "Lo Barnechea",
-                "Lo Prado",
-                "Macul",
-                "Maipú",
-                "Ñuñoa",
-                "Pedro Aguirre Cerda",
-                "Peñalolén",
-                "Providencia",
-                "Pudahuel",
-                "Puente Alto",
-                "Quilicura",
-                "Quinta Normal",
-                "Recoleta",
-                "Renca",
-                "San Joaquín",
-                "San Miguel",
-                "San Ramón",
-                "Santiago",
-                "Vitacura",
-            ],
-        };
+  name: "Carro",
+  data() {
+    return {
+      
+    };
+  },
+  components:{
+    Total
+  },
+  methods: {
+    ...mapActions("Cart", [
+      "quitarDelCarrito",
+      "sumarProducto",
+      "descontarProducto",
+    ]),
+    sumarCantidad(id) {
+      this.sumarProducto(id);
     },
-    methods: {
-        finalizar() {
-            this.$router.push("/Pedido-realizado");
-        },
+    dismiuirCantidad(id) {
+      this.descontarProducto(id);
     },
+  },
+  computed: {
+    ...mapState("Cart", ["carrito"]),
+    ...mapGetters(["precioEnMiles"]),
+    precio() {
+      return this.precioEnMiles(this.cerveza.data.precio);
+    },
+  },
+  title() {
+    return `Mi carrito`;
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@/assets/scss/main.scss";
 
-.cart_header,
 .cart_item {
-    text-align: center;
-}
+  text-align: center;
+  width: 100%;
+  // min-height: 6rem;
+  background-color: $main-white;
+  color: $main-black;
+  margin: 1rem 0;
+  font-size: $text-caption;
+  padding: 1rem 0;
 
-.cart_header {
-    font-size: $text-caption;
-    color: #aaa;
-}
-
-.cart_header,
-.cart_item_row {
+  &_row {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    p {
+      margin: 0;
+    }
+  }
+  &_quantity {
+    span {
+      padding: 0.25rem;
+      margin: 0 0.25rem;
+    }
+  }
+  &_price {
+    font-size: $text-caption;
+    font-weight: 700;
+  }
 }
 
-.cart_item {
-    width: 100%;
-    // min-height: 6rem;
-    background-color: $main-white;
-    color: $main-black;
-    margin: 1rem 0;
+.cart_empty{
+  height: 30vh;
+}
+
+@media (min-width: 576px) {
+  .cart_item {
     font-size: $text-body;
-    padding: 1rem 0;
-
+    &_name {
+      width: 45%;
+    }
     &_quantity {
+      font-size: $text-title2;
 
-        span {
-            font-size: $text-title2;
-            padding: .25rem;
-            margin: 0 .25rem;
-
-        }
+      width: 25%;
     }
-
     &_price {
-        font-size: $text-body;
+      width: 15%;
+      font-size: $text-body;
     }
-
-    &_row {
-        p {
-            margin: 0;
-        }
+    &_delete {
+      width: 15%;
     }
-}
-
-.cart_total {
-    width: 100%;
-    min-height: 300px;
-    background-color: $main-black;
-    color: $main-white;
-    text-align: left;
-    position: sticky;
-    top: 1rem;
+  }
 }
 </style>

@@ -9,33 +9,42 @@
           <v-img
             class="ml-auto rounded-xl cerveza_content_img"
             width="100%"
-            :src="cerveza.foto"
+            :src="cerveza.data.foto"
           />
         </v-col>
         <v-col cols="12" md="8">
-          <h2>{{cerveza.cerveceria}}</h2>
+          <h2>{{ cerveza.data.cerveceria }}</h2>
           <div class="wrapper_variedad_precio">
             <h3>
-              {{cerveza.nombre}}
+              {{ cerveza.data.nombre }}
               <span class="cerveza_content_volumen">(350cc)</span>
             </h3>
-            <h2>${{cerveza.precio}}</h2>
+            <h2>${{ precio }}</h2>
           </div>
           <v-divider light />
           <p>
-            {{cerveza.resena}}
+            {{ cerveza.data.resena }}
           </p>
           <h4>Información:</h4>
 
           <ul>
-            <li>Origen: <strong>{{cerveza.origen}}</strong></li>
-            <li>Estilo: <strong>{{cerveza.estilo}}</strong></li>
-            <li>ABV: <strong>{{cerveza.ABV}} %</strong></li>
-            <li>IBU: <strong>{{cerveza.IBU}}</strong></li>
+            <li>
+              Origen: <strong>{{ cerveza.data.origen }}</strong>
+            </li>
+            <li>
+              Estilo: <strong>{{ cerveza.data.estilo }}</strong>
+            </li>
+            <li>
+              ABV: <strong>{{ cerveza.data.ABV }} %</strong>
+            </li>
+            <li>
+              IBU: <strong>{{ cerveza.data.IBU }}</strong>
+            </li>
           </ul>
           <br />
 
-          <v-btn class="elevation-5" x-large>Agregar a mi carro</v-btn>
+          <v-btn v-if="!cerveza.data.cart" @click="anadirAlCarrito(cerveza.id)"  class="elevation-5" x-large><v-icon>mdi-cart</v-icon> Agregar a mi carro</v-btn> 
+          <v-btn v-else @click="quitarDelCarrito(cerveza.id)" class="elevation-5" x-large dark ><v-icon>mdi-check</v-icon> Producto agregado al carro</v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -43,20 +52,27 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters , mapActions } from "vuex";
 export default {
   name: "DetalleCerveza",
   props: ["detallecerveza"],
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+      ...mapActions('Cart' , ['anadirAlCarrito' ,'quitarDelCarrito'])
+
+  },
   computed: {
-      ...mapGetters('Products' , ['detalleCerveza']),
-      cerveza(){
-          const cervezaPath = this.detallecerveza
-          return this.detalleCerveza(cervezaPath).data
-      }
+    ...mapGetters("Products", ["detalleCerveza"]),
+    ...mapGetters(["precioEnMiles"]),
+    cerveza() {
+      const cervezaPath = this.detallecerveza;
+      return this.detalleCerveza(cervezaPath);
+    },
+    precio(){
+      return this.precioEnMiles(this.cerveza.data.precio)
+    }
   },
 };
 </script>

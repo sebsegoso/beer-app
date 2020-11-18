@@ -25,7 +25,23 @@ export default {
                     })
                     commit('GET_DATA', cervezas)
                 });
-        }
+        },
+        getCervecerias({ commit }) {
+            firebase
+                .firestore()
+                .collection('cervecerias')
+                .onSnapshot(snap => {
+                    let cervecerias = []
+                    snap.forEach(cerveza => {
+                        let beerdata = cerveza.data()
+                        cervecerias.push({
+                            data: beerdata,
+                            id: cerveza.id
+                        })
+                    })
+                    // commit('GET_DATA', cervezas)
+                });
+        },
     },
     getters: {
         cervezasNuevas: (state) => {
@@ -33,21 +49,17 @@ export default {
             return nuevas
         },
         detalleCerveza: (state) => (path) => {
-            let cervezaElegida = state.cervezas.find(cerveza => cerveza.data.path === path)
+            let cervezaElegida = state.cervezas.find(cerveza => cerveza.data.path == path) || {data: {}}
             return cervezaElegida
         },
         resultadoBusqueda: (state) => (busqueda) => {
             let typed = busqueda.trim().toUpperCase()
-            console.log(`typed: ${typed}`)
-
             let resultado = state.cervezas.filter(
                 c => c.data.nombre.toUpperCase().includes(typed) ||
                     c.data.cerveceria.toUpperCase().includes(typed) ||
                     c.data.estilo.toUpperCase().includes(typed) &&
                     busqueda !== ''
             )
-            console.log(`Resultado: ${resultado}`)
-
             return resultado
         }
     }

@@ -80,9 +80,6 @@ export default {
             },
         }
     },
-    created() {
-        console.log(this.fecha)
-    },
     methods: {
         ...mapActions('Admin', ['addProduct']),
         agregarCerveza() {

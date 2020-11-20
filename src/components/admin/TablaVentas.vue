@@ -1,50 +1,86 @@
 <template>
-  <v-data-table
-    dark
-    dense
-    :headers="headers"
-    :items="pedidos"
-    :items-per-page="10"
-    class="elevation-10 rounded-lg"
-  >
-    <!--EDITANDO COLUMNAS -->
-    <template v-slot:item.data.nombre="{ item }">
-      {{ item.data.nombre }} {{ item.data.apellidos }}
-    </template>
+  <div>
+  <!--MODAL DETALLE-->
+    <v-dialog v-model="modalDetalle" v-if="pedido">
+      <v-card>
+        <v-card-actions>
+          <div class="ml-auto rounded-xl">
+            <v-btn @click="modalDetalle = false" fab x-small dark color="black">X</v-btn>
+          </div>
+        </v-card-actions>
+        <h3 class="text-center" v-if="pedido">
+          Detalle pedido de <u>{{ pedido.nombre }} {{ pedido.apellidos }}</u>
+        </h3>
+        <v-card-subtitle class="text-center" v-if="pedido"
+          >Realizado el {{ pedido.fecha }} - Medio entrega:
+          {{ pedido.entrega }}</v-card-subtitle
+        >
+        <TablaDetallePedido :pedido="pedido" />
+        <v-card-actions>
+          <div class="mx-auto">
+            <v-btn v-if="!pedido.entregado" dark @click="entregado(pedido.id)"
+              >Marcar como entregado</v-btn
+            >
+            <v-btn v-else dark color="red" @click="noEntregado(pedido.id)"
+              >Marcar como NO entregado</v-btn
+            >
+          </div>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
-    <template v-slot:item.data.direccion="{ item }">
-      {{
-        item.data.direccion
-          ? `${item.data.direccion.calle} ${item.data.direccion.numero}, ${item.data.direccion.departamento}, ${item.data.direccion.comuna}`
-          : ""
-      }}
-    </template>
+    <!-- TABLA -->
+    <v-data-table
+      dark
+      dense
+      :headers="headers"
+      :items="pedidos"
+      :items-per-page="10"
+      class="elevation-10 rounded-lg"
+    >
+      <!--EDITANDO COLUMNAS -->
+      <template v-slot:item.data.nombre="{ item }">
+        {{ item.data.nombre }} {{ item.data.apellidos }}
+      </template>
 
-    <template v-slot:item.data.productos="{ item }">
-      <ul>
-        <li v-for="(producto, i) in item.data.productos" :key="i">
-          <b> [{{ producto.cantidad }}] : </b>
-          {{ producto.producto.cerveceria }} -
-          {{ producto.producto.nombre }}
-        </li>
-      </ul>
-    </template>
+      <template v-slot:item.data.direccion="{ item }">
+        {{ item.data.direccion ? `${item.data.direccion.comuna}` : "" }}
+      </template>
 
-    <template v-slot:item.data.entregado="{ item }">
-      {{ item.data.entregado ? "Sí" : "No" }}
-    </template>
+      <template v-slot:item.data.productos="{ item }">
+        <ul>
+          <li v-for="(producto, i) in item.data.productos" :key="i">
+            <b> [{{ producto.cantidad }}] : </b>
+            {{ producto.producto.cerveceria }} -
+            {{ producto.producto.nombre }}
+          </li>
+        </ul>
+      </template>
 
-    <template v-slot:item.detalle="{ item }">
-      <v-btn x-small light @click="verDetalle(item)"
-        ><v-icon>mdi-dots-horizontal</v-icon>Detalle</v-btn
-      >
-    </template>
-  </v-data-table>
+      <template v-slot:item.data.total="{ item }">
+        ${{ item.data.total }}
+      </template>
+
+      <template v-slot:item.data.entregado="{ item }">
+        {{ item.data.entregado ? "Sí" : "No" }}
+      </template>
+
+      <template v-slot:item.detalle="{ item }">
+        <v-btn x-small light @click="verDetalle(item)"
+          ><v-icon>mdi-dots-horizontal</v-icon>Detalle</v-btn
+        >
+      </template>
+    </v-data-table>
+  </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions } from "vuex";
+import TablaDetallePedido from "@/components/TablaDetallePedido";
+
 export default {
+  components: { TablaDetallePedido },
+  props: ["pedidos"],
   data() {
     return {
       headers: [
@@ -74,21 +110,21 @@ export default {
           value: "data.entrega",
         },
         {
-          text: "Dirección",
+          text: "Comuna entrega",
           value: "data.direccion",
         },
         {
-          text: "Cant. productos",
+          text: "Productos",
           value: "data.productos",
         },
         {
           text: "Total",
           value: "data.total",
         },
-        {
-          text: "Medio de pago",
-          value: "data.medioDePago",
-        },
+        // {
+        //   text: "Medio de pago",
+        //   value: "data.medioDePago",
+        // },
         {
           text: "Entregado",
           value: "data.entregado",
@@ -98,17 +134,33 @@ export default {
           value: "detalle",
         },
       ],
+      modalDetalle: false,
+      pedido: null,
     };
   },
   computed: {
-    ...mapState("Admin", ["pedidos"]),
     direccion(direccion) {
       return `${direccion.calle} ${direccion.numero} , ${direccion.departamento} , ${direccion.comuna}`;
     },
   },
   methods: {
+    ...mapActions("Admin", ["pedidoEntregado", "pedidoNoEntregado"]),
     verDetalle(item) {
-      console.log("Detalle: ", item);
+      item.data.id = item.id;
+      this.pedido = item.data;
+      this.modalDetalle = true;
+    },
+    entregado(id) {
+      this.pedidoEntregado(id);
+      this.modalDetalle = false;
+      this.pedido.entregado = true;
+
+    },
+    noEntregado(id) {
+      this.pedidoNoEntregado(id);
+      this.modalDetalle = false;
+      this.pedido.entregado = false;
+
     },
   },
 };

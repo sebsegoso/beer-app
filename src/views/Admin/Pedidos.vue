@@ -1,19 +1,37 @@
 <template>
-  <v-container fluid>
+  <v-container fluid id="pedidos">
     <h1>Pedidos</h1>
-    <TablaVentas />
+    <h2>NO entregados</h2>
+    <TablaVentas :pedidos="noEntregados" />
+    <br>
+    <v-divider></v-divider>
+    <h2>Entregados</h2>
+    <TablaVentas :pedidos="entregados" />
+
   </v-container>
 </template>
 
 <script>
 import TablaVentas from "@/components/admin/TablaVentas";
-
+import { mapState } from "vuex";
 export default {
   components: {
     TablaVentas,
   },
+  computed: {
+    ...mapState("Admin", ["pedidos"]),
+    noEntregados() {
+      return this.pedidos.filter((p) => p.data.entregado == false);
+    },
+    entregados() {
+      return this.pedidos.filter((p) => p.data.entregado == true);
+    },
+  },
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+#pedidos {
+  min-height: 92vh;
+}
 </style>

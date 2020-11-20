@@ -45,16 +45,21 @@ export default {
     },
     getters: {
         cervezasNuevas: (state) => {
-            let nuevas = state.cervezas.filter(beer => beer.data.nueva === true)
+            let nuevas = state.cervezas.filter(beer => beer.data.nueva === true && beer.data.stock > 0)
             return nuevas
         },
+        cervezasConStock: (state) => {
+            let conStock = state.cervezas.filter(beer => beer.data.stock > 0)
+            return conStock
+        },
         detalleCerveza: (state) => (path) => {
-            let cervezaElegida = state.cervezas.find(cerveza => cerveza.data.path == path) || {data: {}}
+            let cervezaElegida = state.cervezas.find(cerveza => cerveza.data.path == path) || { data: {} }
             return cervezaElegida
         },
-        resultadoBusqueda: (state) => (busqueda) => {
+        resultadoBusqueda: (state , getters) => (busqueda) => {
             let typed = busqueda.trim().toUpperCase()
-            let resultado = state.cervezas.filter(
+            let conStock = getters.cervezasConStock || []
+            let resultado = conStock.filter(
                 c => c.data.nombre.toUpperCase().includes(typed) ||
                     c.data.cerveceria.toUpperCase().includes(typed) ||
                     c.data.estilo.toUpperCase().includes(typed) &&

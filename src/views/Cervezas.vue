@@ -13,7 +13,6 @@
           <v-col>
             <v-select
               v-model="select"
-              @change="sort"
               label="Ordenar por..."
               :items="items"
               dense
@@ -42,7 +41,7 @@
     <v-container class="pag_body pa-md-1 mx-auto pa-0">
       <v-row>
         <v-col v-for="(cerveza, i) in buscar" :key="i" cols="6" :md="3" :xl="2">
-          <Card :producto="cerveza"/>
+          <Card :producto="cerveza" />
         </v-col>
       </v-row>
     </v-container>
@@ -67,39 +66,50 @@ export default {
         "Precios de mayor a menor",
       ],
       select: null,
-      busqueda: '',
+      busqueda: "",
     };
   },
-  methods: {
-    sort(ordenarSegun) {
-      this.buscar.sort(this.compareValues("cerveceria"));
-      alert();
-    },
-    compareValues(key, order = "asc") {
-      return function innerSort(a, b) {
-        if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
-          // property doesn't exist on either object
-          return 0;
-        }
-
-        const varA = typeof a[key] === "string" ? a[key].toUpperCase() : a[key];
-        const varB = typeof b[key] === "string" ? b[key].toUpperCase() : b[key];
-
-        let comparison = 0;
-        if (varA > varB) {
-          comparison = 1;
-        } else if (varA < varB) {
-          comparison = -1;
-        }
-        return order === "desc" ? comparison * -1 : comparison;
-      };
-    },
-  },
+  methods: {},
   computed: {
     ...mapState("Products", ["cervezas"]),
-    ...mapGetters("Products", ["resultadoBusqueda"]),
+    ...mapGetters("Products", ["resultadoBusqueda", "cervezasConStock"]),
     buscar() {
-      return this.resultadoBusqueda(this.busqueda);
+      let productos = this.resultadoBusqueda(this.busqueda);
+      let ordenarPorNombre = (a, b) => {
+        if (a.data.nombre > b.data.nombre) {
+          return 1;
+        }
+        if (a.data.nombre < b.data.nombre) {
+          return -1;
+        }
+        return 0;
+      };
+
+      let ordenarPorPrecio = (a, b) => {
+        if (a.data.precio > b.data.precio) {
+          return 1;
+        }
+        if (a.data.precio < b.data.precio) {
+          return -1;
+        }
+        return 0;
+      };
+
+      if (this.select == "Nombre A-Z") {
+        return productos.sort(ordenarPorNombre);
+      }
+      if (this.select == "Nombre Z-A") {
+        return productos.sort(ordenarPorNombre).reverse();
+      } 
+      if (this.select == "Precios de menor a mayor") {
+        return productos.sort(ordenarPorPrecio);
+      }
+      if (this.select == "Precios de mayor a menor") {
+        return productos.sort(ordenarPorPrecio).reverse();
+      }
+      
+      
+      else return productos;
     },
   },
   title() {

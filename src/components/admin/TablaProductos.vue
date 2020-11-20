@@ -106,7 +106,6 @@ export default {
   methods: {
     ...mapActions("Admin", ["deleteProduct"]),
     editarProducto(item) {
-      console.log(item);
       this.dialogWindow = true;
       this.productoAEditar = JSON.parse(JSON.stringify(item));
     },

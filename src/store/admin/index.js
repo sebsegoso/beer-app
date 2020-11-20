@@ -48,7 +48,7 @@ export default {
                 .update(data)
         },
         //PEDIDOS
-        getPedidos({commit}){
+        getPedidos({ commit }) {
             firebase
                 .firestore()
                 .collection('pedidos')
@@ -63,6 +63,20 @@ export default {
 
                     commit("GET_ORDERS", pedidos)
                 })
+        },
+        pedidoEntregado({ commit }, id) {
+            firebase
+                .firestore()
+                .collection('pedidos')
+                .doc(id)
+                .update({ entregado: true })
+        },
+        pedidoNoEntregado({ commit }, id) {
+            firebase
+                .firestore()
+                .collection('pedidos')
+                .doc(id)
+                .update({ entregado: false })
         },
         //COMENTARIOS-------------------
         getComments({ commit }) {

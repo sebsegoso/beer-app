@@ -47,4 +47,7 @@ export default {
 
 <style lang="scss">
 @import "@/assets/scss/main.scss";
+#App{
+  min-height: 100vh;
+}
 </style>

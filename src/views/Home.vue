@@ -32,7 +32,11 @@
       <h2 class="text-center">Cervezas nuevas</h2>
 
       <v-slide-group class="main_slide pa-4">
-        <v-slide-item v-for="(cerveza, i) in cervezasNuevas" :key="i" class="px-3">
+        <v-slide-item
+          v-for="(cerveza, i) in cervezasNuevas"
+          :key="i"
+          class="px-3"
+        >
           <Card :producto="cerveza" />
         </v-slide-item>
       </v-slide-group>

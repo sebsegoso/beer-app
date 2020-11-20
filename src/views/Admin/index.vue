@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid id="productos">
     <h1>Productos</h1>
     <TablaProductos />
     <br />
@@ -19,5 +19,8 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+#productos{
+  min-height: 92vh;
+}
 </style>

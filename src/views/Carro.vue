@@ -4,8 +4,11 @@
       <h1>Mi carro</h1>
     </div>
     <v-container class="pag_body mx-auto py-4">
-      <div v-if="this.carrito.length == 0" class="cart_empty d-flex align-center justify-center">
-        <h2  class="text-center">No hay productos agregados en tu carrito</h2>
+      <div
+        v-if="this.carrito.length == 0"
+        class="cart_empty d-flex align-center justify-center"
+      >
+        <h2 class="text-center">No hay productos agregados en tu carrito</h2>
       </div>
       <v-row v-else>
         <!--ITEMS-->
@@ -64,7 +67,7 @@
           </div>
         </v-col>
         <!--TOTALES -->
-        <v-col class="pl-2"> 
+        <v-col class="pl-2">
           <Total />
         </v-col>
       </v-row>
@@ -74,16 +77,15 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
-import Total from '@/components/Total.vue'
+import Total from "@/components/Total.vue";
 export default {
   name: "Carro",
   data() {
     return {
-      
     };
   },
-  components:{
-    Total
+  components: {
+    Total,
   },
   methods: {
     ...mapActions("Cart", [
@@ -144,7 +146,7 @@ export default {
   }
 }
 
-.cart_empty{
+.cart_empty {
   height: 30vh;
 }
 

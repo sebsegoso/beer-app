@@ -3,7 +3,9 @@
     <v-tab to="/admin">PRODUCTOS</v-tab>
     <v-tab to="/admin/pedidos"><v-badge :content="noEntregados" :value="noEntregados" color="red">PEDIDOS</v-badge></v-tab>
     <v-tab to="/admin/comentarios">COMENTARIOS</v-tab>
+    <v-tab to="/">TIENDA</v-tab>
   </v-tabs>
+
 </template>
 
 <script>

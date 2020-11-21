@@ -1,7 +1,7 @@
 <template>
   <v-simple-table class="tabla_entrega">
     <tbody>
-      <tr>
+      <tr v-if="pedido.id">
         <th class="text-right">CÓDIGO DE COMPRA:</th>
         <td>
           <b class="codigo">{{ pedido.id }}</b>
@@ -87,6 +87,9 @@ export default {
 @import "@/assets/scss/main.scss";
 .codigo {
   font-size: 1.5rem;
+  background-color: $main-yellow;
+  color: $main-black;
+  padding: .25rem .5rem;
 }
 </style>
 

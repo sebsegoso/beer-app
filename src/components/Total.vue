@@ -1,125 +1,173 @@
 <template>
-  <v-container class="cart_total elevation-5 rounded-l-xl pa-2">
-    <h2>TOTAL</h2>
-    <v-divider />
-    <h5>Cantidad de productos: {{ cantidadProductos }}</h5>
-    <v-divider />
-    <h5>Subtotal: ${{ subtotal }}</h5>
-    <h5 v-show="entrega">Envío: $3.500</h5>
-    <v-divider dark></v-divider>
-    <h4 class="cart_total_total">Total: ${{ total }}</h4>
-    <v-divider />
-    <v-container>
-      <h5>Forma de entrega:</h5>
-      <v-radio-group dark row v-model="entrega" mandatory>
-        <v-radio label="Retiro" :value="false"></v-radio>
-        <v-radio label="Despacho a domicilio" :value="true"></v-radio>
-      </v-radio-group>
-      <v-divider inset></v-divider>
-      <h5>Datos cliente</h5>
-      <v-text-field
-        dark
-        outlined
-        dense
-        label="Nombre"
-        v-model="nombre"
-        type="text"
-      ></v-text-field>
-      <v-text-field
-        dark
-        outlined
-        dense
-        label="Apellidos"
-        v-model="apellidos"
-        type="text"
-      ></v-text-field>
-      <v-text-field
-        dense
-        dark
-        outlined
-        :rules="emailRules"
-        label="Correo electrónico"
-        v-model="email"
-        required
-      >
-      </v-text-field>
-      <v-text-field
-        dark
-        outlined
-        dense
-        label="Teléfono de contacto"
-        type="number"
-        prefix="+56"
-        v-model="telefono"
-      ></v-text-field>
-      <v-divider inset></v-divider>
-      <div v-show="entrega">
-        <h5>Dirección de entrega</h5>
-        <v-select
-          dark
-          dense
-          outlined
-          label="Comuna"
-          :items="comunas"
-          v-model="comuna"
-        ></v-select>
+  <div>
+    <!--MODAL FINALIZAR -->
+    <v-dialog v-model="modalFinalizar" v-if="pedido" persistent>
+      <div class="finalizar">
+        <v-card dark>
+          <v-card-actions>
+            <div class="ml-auto rounded-xl">
+              <v-btn @click="modalFinalizar = false" fab x-small light>X</v-btn>
+            </div>
+          </v-card-actions>
+          <h4 class="text-center" v-if="pedido">
+            {{ pedido.nombre }}, por favor confirma tus datos:
+          </h4>
+
+          <TablaDetallePedido :pedido="pedido" />
+          <v-card-actions>
+            <div class="text-center mx-auto">
+              <v-checkbox
+                v-model="checkbox"
+                label="Los datos ingresados son correctos y deseo finalizar mi compra"
+                color="warning"
+                hide-details
+              ></v-checkbox>
+              <div>
+                <v-btn
+                  :disabled="!checkbox"
+                  color="warning"
+                  @click="finalizar"
+                  large
+                  class="my-1"
+                >
+                  Finalizar compra
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn @click="modalFinalizar = false" light small class="my-1">
+                  Seguir comprando
+                </v-btn>
+              </div>
+            </div>
+          </v-card-actions>
+        </v-card>
+      </div>
+    </v-dialog>
+
+    <!--total -->
+    <v-container class="cart_total elevation-5 rounded-l-xl pa-2">
+      <h2>TOTAL</h2>
+      <v-divider />
+      <h5>Cantidad de productos: {{ cantidadProductos }}</h5>
+      <v-divider />
+      <h5>Subtotal: ${{ subtotal }}</h5>
+      <h5 v-show="entrega">Envío: $3.500</h5>
+      <v-divider dark></v-divider>
+      <h4 class="cart_total_total">Total: ${{ total }}</h4>
+      <v-divider />
+      <v-container>
+        <h5>Forma de entrega:</h5>
+        <v-radio-group dark row v-model="entrega" mandatory>
+          <v-radio label="Retiro" :value="false"></v-radio>
+          <v-radio label="Despacho a domicilio" :value="true"></v-radio>
+        </v-radio-group>
+        <v-divider inset></v-divider>
+        <h5>Datos cliente</h5>
         <v-text-field
           dark
           outlined
           dense
-          label="Calle"
+          label="Nombre"
+          v-model="nombre"
           type="text"
-          v-model="calle"
         ></v-text-field>
         <v-text-field
           dark
           outlined
           dense
-          label="Número"
+          label="Apellidos"
+          v-model="apellidos"
+          type="text"
+        ></v-text-field>
+        <v-text-field
+          dense
+          dark
+          outlined
+          :rules="emailRules"
+          label="Correo electrónico"
+          v-model="email"
+          required
+        >
+        </v-text-field>
+        <v-text-field
+          dark
+          outlined
+          dense
+          label="Teléfono de contacto"
           type="number"
-          prefix="#"
-          v-model="numero"
-        ></v-text-field>
-        <v-text-field
-          dark
-          outlined
-          dense
-          label="Block o departamento"
-          v-model="departamento"
-          type="text"
+          prefix="+56"
+          v-model="telefono"
         ></v-text-field>
         <v-divider inset></v-divider>
+        <div v-show="entrega">
+          <h5>Dirección de entrega</h5>
+          <v-select
+            dark
+            dense
+            outlined
+            label="Comuna"
+            :items="comunas"
+            v-model="comuna"
+          ></v-select>
+          <v-text-field
+            dark
+            outlined
+            dense
+            label="Calle"
+            type="text"
+            v-model="calle"
+          ></v-text-field>
+          <v-text-field
+            dark
+            outlined
+            dense
+            label="Número"
+            type="number"
+            prefix="#"
+            v-model="numero"
+          ></v-text-field>
+          <v-text-field
+            dark
+            outlined
+            dense
+            label="Block o departamento"
+            v-model="departamento"
+            type="text"
+          ></v-text-field>
+          <v-divider inset></v-divider>
+        </div>
+        <h5>Medio de pago</h5>
+        <v-radio-group dark row mandatory v-model="medioDePago">
+          <v-radio label="Efectivo" :value="false"></v-radio>
+          <v-radio label="Transferencia" :value="true"></v-radio>
+        </v-radio-group>
+        <v-divider inset></v-divider>
+        <h5>Comentarios</h5>
+        <v-textarea
+          dark
+          dense
+          outlined
+          rows="1"
+          label="ej: Timbre malo, Casa roja, etc"
+          v-model="comentario"
+        ></v-textarea>
+      </v-container>
+      <v-divider />
+      <div class="text-center py-3">
+        <v-btn x-large light color="#fff" @click="confirmar"
+          >Finalizar pedido</v-btn
+        >
       </div>
-      <h5>Medio de pago</h5>
-      <v-radio-group dark row mandatory v-model="medioDePago">
-        <v-radio label="Efectivo" :value="false"></v-radio>
-        <v-radio label="Transferencia" :value="true"></v-radio>
-      </v-radio-group>
-      <v-divider inset></v-divider>
-      <h5>Comentarios</h5>
-      <v-textarea
-        dark
-        dense
-        outlined
-        rows="1"
-        label="ej: Timbre malo, Casa roja, etc"
-        v-model="comentario"
-      ></v-textarea>
     </v-container>
-    <v-divider />
-    <div class="text-center py-3">
-      <v-btn x-large light color="#fff" @click="finalizar"
-        >Finalizar pedido</v-btn
-      >
-    </div>
-  </v-container>
+  </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
+import TablaDetallePedido from "@/components/TablaDetallePedido";
 
 export default {
   name: "Totales",
+  components: { TablaDetallePedido },
   data() {
     return {
       comunas: [
@@ -170,11 +218,16 @@ export default {
       numero: "", //numero
       departamento: "",
       comuna: "",
+
+      //modal
+      modalFinalizar: false,
+      pedido: null,
+      checkbox: false,
     };
   },
   methods: {
-    ...mapActions("Cart", ["pedidoFinalizado" ,'quitarDelCarrito']),
-    finalizar() {
+    ...mapActions("Cart", ["pedidoFinalizado", "quitarDelCarrito"]),
+    confirmar() {
       //datos base
       let pedido = {
         nombre: this.nombre,
@@ -188,7 +241,7 @@ export default {
         cantidadProductos: this.cantidadProductos,
         total: this.total,
         productos: [],
-        entregado : false
+        entregado: false,
       };
       //Detalle productos
       this.carrito.forEach((p) => {
@@ -196,7 +249,7 @@ export default {
           producto: {
             cerveceria: p.data.cerveceria,
             nombre: p.data.nombre,
-            stock: p.data.stock
+            stock: p.data.stock,
           },
           id: p.id,
           cantidad: Number(p.data.cantidad),
@@ -207,18 +260,22 @@ export default {
         pedido.direccion = {
           calle: this.calle,
           numero: Number(this.numero),
-          departamento: this.departamento , 
+          departamento: this.departamento,
           comuna: this.comuna,
         };
         pedido.subtotal = this.subtotal;
         pedido.envio = this.envio;
       }
-
-      this.pedidoFinalizado(pedido);
+      this.pedido = pedido;
+      this.modalFinalizar = true;
+    },
+    finalizar() {
+      this.pedidoFinalizado(this.pedido);
       this.$router.push("/Pedido-realizado");
-      this.carrito.forEach(p=> {
-        this.quitarDelCarrito(p.id)
-      })
+      this.carrito.forEach((p) => {
+        this.quitarDelCarrito(p.id);
+      });
+      this.modalFinalizar = true;
     },
   },
   computed: {
@@ -263,5 +320,9 @@ export default {
   &_total {
     color: $main-yellow;
   }
+}
+
+.finalizar {
+  max-height: 80vh;
 }
 </style>

@@ -8,6 +8,12 @@
         <h3 class="text-center"><u>Órden de pedido</u></h3>
         <TablaDetallePedido :pedido="pedido" />
       </v-sheet>
+      <br />
+      <div class="text-center">
+        <v-btn to="/" light small class="my-1" x-large>
+          Volver a inicio
+        </v-btn>
+      </div>
     </v-container>
   </div>
 </template>

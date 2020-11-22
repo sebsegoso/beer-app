@@ -1,10 +1,12 @@
 import firebase from 'firebase'
+import router from '../../router';
 
 export default {
     namespaced: true,
     state: {
         comentarios: [],
-        pedidos: []
+        pedidos: [],
+        usuario: ''
     },
     mutations: {
         //COMENTARIOS-------------------
@@ -13,6 +15,13 @@ export default {
         },
         GET_ORDERS(state, pedidos) {
             state.pedidos = pedidos;
+        },
+        //AUTH
+        LOG_IN(state, user) {
+            state.usuario = user;
+        },
+        LOG_OUT(state) {
+            state.usuario = ''
         }
     },
     actions: {
@@ -102,6 +111,30 @@ export default {
                 .doc(id)
                 .delete()
                 .then(() => alert('Comentario eliminado'))
+        },
+        //AUTH
+        signInWithEmailAndPass({ commit }, user) {
+            firebase
+                .auth()
+                .signInWithEmailAndPassword(user.email, user.password)
+                .then(result => {
+                    let usuario = result.user;
+                    console.log("Sesión iniciada :", usuario.email);
+                    commit('LOG_IN', usuario)
+                })
+                .then(() => router.push('/admin'))
+                .catch(error => console.log(error.message))
+
+        },
+        logOut({ commit }) {
+            firebase
+                .auth()
+                .signOut()
+                .then(() => {
+                    commit('LOG_OUT')
+                    alert("Sesión cerrada");
+                    router.push({ name: 'Home' });
+                });
         },
     },
     modules: {

@@ -1,6 +1,8 @@
 <template>
   <v-app id="App">
-    <MenuAdmin v-if="admin" />
+    <div  v-if="!login">
+      <MenuAdmin v-if="admin" />
+    </div>
     <!--MAIN -->
     <v-main>
       <router-view />
@@ -27,7 +29,10 @@ export default {
   },
   computed: {
     admin() {
-      return this.$route.fullPath.includes("/admin");
+      return this.$route.fullPath.includes("/admin") || this.$route.fullPath.includes("/login") ;
+    },
+    login() {
+      return this.$route.name == "Login";
     },
   },
   methods: {

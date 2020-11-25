@@ -6,7 +6,8 @@ export default {
     state: {
         comentarios: [],
         pedidos: [],
-        usuario: ''
+        usuario: '',
+        errorMessage: ''
     },
     mutations: {
         //COMENTARIOS-------------------
@@ -19,10 +20,17 @@ export default {
         //AUTH
         LOG_IN(state, user) {
             state.usuario = user;
+            console.log(state.usuario)
+
         },
         LOG_OUT(state) {
             state.usuario = ''
+        },
+        //error
+        ERROR(state, error) {
+            state.errorMessage = error
         }
+
     },
     actions: {
         //PRODUCTOS-------------------
@@ -113,17 +121,50 @@ export default {
                 .then(() => alert('Comentario eliminado'))
         },
         //AUTH
-        signInWithEmailAndPass({ commit }, user) {
-            firebase
-                .auth()
-                .signInWithEmailAndPassword(user.email, user.password)
-                .then(result => {
-                    let usuario = result.user;
-                    console.log("Sesión iniciada :", usuario.email);
-                    commit('LOG_IN', usuario)
-                })
-                .then(() => router.push('/admin'))
-                .catch(error => console.log(error.message))
+        async createUSer({ commit }, user) {
+            try {
+                let crearUsuario = await firebase
+                    .auth()
+                    .createUserWithEmailAndPassword(user.email, user.password)
+
+                delete user.password
+
+                let usuarioAFirestore = await firebase
+                    .firestore()
+                    .collection('usuarios')
+                    .add(user)
+                return true
+            } catch (error) {
+                commit('ERROR', error.message)
+                return false
+            }
+        },
+        async signInWithEmailAndPass({ commit }, user) {
+            try {
+                const login = await firebase
+                    .auth()
+                    .signInWithEmailAndPassword(user.email, user.password);
+
+                const snapshot = await firebase
+                    .firestore()
+                    .collection("usuarios")
+                    .where("email", "==", user.email)
+                    .get();
+
+                snapshot.forEach((doc) => {
+                    commit("LOG_IN", doc.data());
+                });
+
+                router.push({ name: 'Admin' })
+                return true;
+            }
+            catch {
+                error => {
+                    console.log(error)
+                    commit('ERROR', error.message)
+                    return false
+                }
+            }
 
         },
         logOut({ commit }) {

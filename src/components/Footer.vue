@@ -66,7 +66,7 @@
           </v-container>
         </v-col>
         <v-col cols="12">
-          <h6 class="text-center pb-5">
+          <h6 class="text-center pb-5 pb-md-0">
             made by:
             <a href="https://github.com/sebsegoso" target="_blank">sebsegoso</a>
             2020
@@ -130,7 +130,9 @@ export default {
   color: $main-white;
   min-height: 150px;
   padding: 1rem 0 5% 0;
-
+  a{
+    color: $main-yellow;
+  }
   p {
     margin: 0;
   }

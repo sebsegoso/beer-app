@@ -3,11 +3,15 @@ import firebase from 'firebase'
 export default {
     namespaced: true,
     state: {
-        cervezas: []
+        cervezas: [],
+        cervecerias: []
     },
     mutations: {
         GET_DATA(state, cervezas) {
             state.cervezas = cervezas;
+        },
+        GET_BREWERIES(state, cervecerias) {
+            state.cervecerias = cervecerias;
         }
     },
     actions: {
@@ -33,13 +37,12 @@ export default {
                 .onSnapshot(snap => {
                     let cervecerias = []
                     snap.forEach(cerveza => {
-                        let beerdata = cerveza.data()
                         cervecerias.push({
-                            data: beerdata,
+                            data: cerveza.data(),
                             id: cerveza.id
                         })
                     })
-                    // commit('GET_DATA', cervezas)
+                    commit('GET_BREWERIES', cervecerias)
                 });
         },
     },
@@ -56,7 +59,7 @@ export default {
             let cervezaElegida = state.cervezas.find(cerveza => cerveza.data.path == path) || { data: {} }
             return cervezaElegida
         },
-        resultadoBusqueda: (state , getters) => (busqueda) => {
+        resultadoBusqueda: (state, getters) => (busqueda) => {
             let typed = busqueda.trim().toUpperCase()
             let conStock = getters.cervezasConStock || []
             let resultado = conStock.filter(

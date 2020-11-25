@@ -8,6 +8,10 @@
 <script>
 import TablaComentarios from "@/components/admin/TablaComentarios";
 export default {
+  name: 'Comentarios',
+   title() {
+    return `Comentarios | Admin`;
+  },
   components: {
     TablaComentarios,
   },

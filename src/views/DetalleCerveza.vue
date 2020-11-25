@@ -13,7 +13,9 @@
           />
         </v-col>
         <v-col cols="12" md="8">
-          <h2>{{ cerveza.data.cerveceria }}</h2>
+          <router-link :to="`/cervezas/${cerveza.data.cerveceria}`" class="cerveza_content_link">
+            <h2>{{ cerveza.data.cerveceria }}</h2>
+          </router-link>
           <div class="wrapper_variedad_precio">
             <h3>
               {{ cerveza.data.nombre }}
@@ -43,7 +45,8 @@
           </ul>
           <br />
 
-          <v-btn v-if="!cerveza.data.cart" @click="anadirAlCarrito(cerveza.id)"  class="elevation-5" x-large><v-icon>mdi-cart</v-icon> Agregar a mi carro</v-btn> 
+          <v-btn v-if="cerveza.data.stock <= 0" class="elevation-5" x-large light disabled>Producto agotado</v-btn>
+          <v-btn v-else-if="!cerveza.data.cart" @click="anadirAlCarrito(cerveza.id)"  class="elevation-5" x-large><v-icon>mdi-cart</v-icon> Agregar a mi carro</v-btn> 
           <v-btn v-else @click="quitarDelCarrito(cerveza.id)" class="elevation-5" x-large dark ><v-icon>mdi-check</v-icon> Producto agregado al carro</v-btn>
         </v-col>
       </v-row>
@@ -58,6 +61,9 @@ export default {
   props: ["detallecerveza"],
   data() {
     return {};
+  },
+  title() {
+    return `${this.cerveza.data.nombre} - ${this.cerveza.data.cerveceria}`;
   },
   methods: {
       ...mapActions('Cart' , ['anadirAlCarrito' ,'quitarDelCarrito'])
@@ -82,6 +88,9 @@ export default {
 
 .cerveza_content {
   padding: 15px 0 40px 0;
+  &_link{
+    color: $main-black;
+  }
 
   &_img {
     transition: filter 0.5s;

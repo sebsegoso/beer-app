@@ -1,5 +1,14 @@
 <template>
   <div id="Login">
+    <v-snackbar v-model="snackbar" :timeout="5000">
+      {{errorMessage}}
+      <template v-slot:action="{ attrs }">
+        <v-btn color="warning" text v-bind="attrs" @click="snackbar = false">
+          X
+        </v-btn>
+      </template>
+    </v-snackbar>
+
     <h1>Login</h1>
     <v-container class="mx-auto">
       <v-form v-model="valid" class="form elevation-5 rounded-xl">
@@ -53,7 +62,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "Login",
@@ -74,8 +83,11 @@ export default {
     rules: {
       required: (value) => !!value || "Contraseña requerida",
     },
+    snackbar: false,
+
   }),
   computed: {
+    ...mapState('Admin', ['errorMessage']),
     disabledlogin() {
       if (this.user.email.trim() == "" || this.user.password.trim() == "")
         return true;
@@ -83,9 +95,10 @@ export default {
     },
   },
   methods: {
-      ...mapActions('Admin' , ['signInWithEmailAndPass']),
-    signIn() {
-      this.signInWithEmailAndPass(this.user);
+    ...mapActions("Admin", ["signInWithEmailAndPass"]),
+    async signIn() {
+      let login = await this.signInWithEmailAndPass(this.user);
+      !login ? this.snackbar = true : true;
     },
   },
 };
@@ -96,7 +109,7 @@ export default {
 
 #Login {
   min-height: 100vh;
-  background: linear-gradient( $main-yellow 75% , $main-black 100%);
+  background: linear-gradient($main-yellow 75%, $main-black 100%);
 }
 .form {
   background-color: $main-black;

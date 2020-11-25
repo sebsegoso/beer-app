@@ -12,6 +12,10 @@ import Accordion from "@/components/admin/Accordion";
 import TablaProductos from "@/components/admin/TablaProductos";
 
 export default {
+  name: "Productos",
+  title() {
+    return "Productos | Admin";
+  },
   components: {
     Accordion,
     TablaProductos,
@@ -20,7 +24,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#productos{
+#productos {
   min-height: 92vh;
 }
 </style>

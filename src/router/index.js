@@ -21,6 +21,7 @@ const routes = [
   {
     path: '/cervezas/:cerveceria',
     name: 'Cerveceria',
+    props: true,
     component: () => import(/* webpackChunkName: "Carro" */ '../views/Cerveceria.vue')
   },
   {
@@ -59,7 +60,7 @@ const routes = [
     meta: {
       login: true
     },
-    component: () => import(/* webpackChunkName: "admin" */ '../views/Admin/Comentarios.vue')
+    component: () => import(/* webpackChunkName: "comentarios" */ '../views/Admin/Comentarios.vue')
   },
   {
     path: '/admin/pedidos',
@@ -67,7 +68,20 @@ const routes = [
     meta: {
       login: true
     },
-    component: () => import(/* webpackChunkName: "admin" */ '../views/Admin/Pedidos.vue')
+    component: () => import(/* webpackChunkName: "pedidos" */ '../views/Admin/Pedidos.vue')
+  },
+  {
+    path: '/admin/crear-usuario',
+    name: 'CrearUsuario',
+    meta: {
+      login: true
+    },
+    component: () => import(/* webpackChunkName: "CrearUsuario" */ '../views/Admin/CrearUsuario.vue')
+  },
+  {
+    path: '*',
+    name: 'NotFound',
+    component: () => import(/* webpackChunkName: "NotFound" */ '../views/NotFound.vue')
   }
 ]
 
@@ -81,10 +95,10 @@ router.beforeEach((to, from, next) => {
   let user = firebase.auth().currentUser;
   let authRequired = to.matched.some(route => route.meta.login);
 
-  if(!user && authRequired){
-    next({name: 'Login'})
-  } 
-  else{
+  if (!user && authRequired) {
+    next({ name: 'Login' })
+  }
+  else {
     next()
   }
 })

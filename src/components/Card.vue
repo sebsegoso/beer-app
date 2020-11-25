@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto card">
+  <div class="d-flex justify-center align-center card">
     <v-card
       class="card_product ma-md-3 rounded-xl elevation-5 d-flex flex-column justify-space-around"
       dark
@@ -8,7 +8,7 @@
       <v-container class="pa-1">
         <div>
           <router-link
-            :to="`cervezas/${producto.data.cerveceria}/${producto.data.path}`"
+            :to="`/cervezas/${producto.data.cerveceria}/${producto.data.path}`"
           >
             <v-img
               :src="producto.data.foto"
@@ -16,11 +16,13 @@
               width="100%"
               aspect-ratio="1"
             ></v-img>
-          
+
             <v-card-title>{{ producto.data.nombre }} </v-card-title>
-            <v-card-subtitle class="pb-1" v-if="producto.data.cerveceria">{{
-              producto.data.cerveceria
-            }}</v-card-subtitle>
+            <v-card-subtitle class="pb-1" v-if="producto.data.cerveceria">
+              <router-link :to="`/cervezas/${producto.data.cerveceria}`">{{
+                producto.data.cerveceria
+              }}</router-link>
+            </v-card-subtitle>
             <v-card-subtitle class="pb-1" v-if="producto.data.estilo">{{
               producto.data.estilo
             }}</v-card-subtitle>
@@ -36,7 +38,18 @@
           <v-card-actions>
             <v-spacer />
             <v-btn
-              v-if="!producto.data.cart"
+              v-if="producto.data.stock <= 0"
+              small
+              dark
+              color="#efc251"
+              width="80%"
+              class="elevation-10 rounded-xl"
+              disabled
+            >
+              Producto agotado
+            </v-btn>
+            <v-btn
+              v-else-if="!producto.data.cart"
               small
               light
               color="#fff"

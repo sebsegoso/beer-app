@@ -15,6 +15,11 @@
 import TablaVentas from "@/components/admin/TablaVentas";
 import { mapState } from "vuex";
 export default {
+  name: 'Pedidos',
+
+  title() {
+    return `Pedidos | Admin`;
+  },
   components: {
     TablaVentas,
   },

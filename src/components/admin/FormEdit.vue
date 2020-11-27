@@ -3,19 +3,49 @@
     <v-container>
       <v-row>
         <v-col cols="6">
-          <v-text-field dense label="Nombre" v-model="producto.data.nombre" required outlined />
+          <v-text-field
+            dense
+            label="Nombre"
+            v-model="producto.data.nombre"
+            required
+            outlined
+          />
         </v-col>
         <v-col cols="6">
-          <v-text-field dense label="Cervecería" v-model="producto.data.cerveceria" required outlined />
+          <v-text-field
+            dense
+            label="Cervecería"
+            v-model="producto.data.cerveceria"
+            required
+            outlined
+          />
         </v-col>
         <v-col cols="4" md="3">
-          <v-text-field dense label="Código" v-model="producto.data.codigo" required outlined />
+          <v-text-field
+            dense
+            label="Código"
+            v-model="producto.data.codigo"
+            required
+            outlined
+          />
         </v-col>
         <v-col cols="8" md="5">
-          <v-text-field dense label="Estilo" v-model="producto.data.estilo" required outlined />
+          <v-text-field
+            dense
+            label="Estilo"
+            v-model="producto.data.estilo"
+            required
+            outlined
+          />
         </v-col>
         <v-col cols="6" md="4">
-          <v-text-field dense label="Origen" v-model="producto.data.origen" required outlined />
+          <v-text-field
+            dense
+            label="Origen"
+            v-model="producto.data.origen"
+            required
+            outlined
+          />
         </v-col>
         <v-col cols="3" md="2">
           <v-text-field
@@ -29,10 +59,23 @@
           />
         </v-col>
         <v-col cols="3" md="2">
-          <v-text-field dense type="number" label="IBU" v-model="producto.data.IBU" required outlined />
+          <v-text-field
+            dense
+            type="number"
+            label="IBU"
+            v-model="producto.data.IBU"
+            required
+            outlined
+          />
         </v-col>
         <v-col cols="12" md="6">
-          <v-text-field dense label="Foto" v-model="producto.data.foto" required outlined />
+          <v-text-field
+            dense
+            label="Foto"
+            v-model="producto.data.foto"
+            required
+            outlined
+          />
         </v-col>
         <v-col cols="4" md="2">
           <v-text-field
@@ -46,7 +89,14 @@
           />
         </v-col>
         <v-col cols="4" md="1">
-          <v-text-field dense type="number" v-model="producto.data.stock" label="Stock" required outlined />
+          <v-text-field
+            dense
+            type="number"
+            v-model="producto.data.stock"
+            label="Stock"
+            required
+            outlined
+          />
         </v-col>
         <v-col cols="4" md="2">
           <v-text-field
@@ -78,11 +128,20 @@
           </v-radio-group>
         </v-col>
         <v-col cols="12" md="4">
-          <v-textarea label="Reseña" v-model="producto.data.resena" rows="1" required outlined dense />
+          <v-textarea
+            label="Reseña"
+            v-model="producto.data.resena"
+            rows="1"
+            required
+            outlined
+            dense
+          />
         </v-col>
 
         <v-col cols="12">
-          <v-btn color="success" @click="updateProduct(producto)"> <v-icon>mdi-pencil</v-icon> CONFIRMAR EDICIÓN </v-btn>
+          <v-btn color="success" @click="editarProducto(producto)">
+            <v-icon>mdi-pencil</v-icon> CONFIRMAR EDICIÓN
+          </v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -90,23 +149,40 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import {mapState, mapActions } from "vuex";
 export default {
   name: "Edit",
   props: ["producto"],
   computed: {
-      productoEdit(){
-          let producto = Object.assign({}, this.producto)
-          return producto
-      }
+    productoEdit() {
+      let producto = Object.assign({}, this.producto);
+      return producto;
+    },
   },
   methods: {
-      ...mapActions('Admin' , ['updateProduct']),
-      editarProducto(item){
-          alert()
-          this.updateProduct(item)
-          this.$emit('cerrarDialog')
-      }
+    ...mapActions("Admin", ["updateProduct"]),
+    async editarProducto(item) {
+      let edit = await this.updateProduct(item);
+
+      edit
+        ? this.$toast.default(
+            `Producto "${item.data.cerveceria} - ${item.data.nombre}" editado`,
+            {
+              position: "top",
+              duration: 3000,
+              dismissible: true,
+            }
+          )
+        : this.$toast.error(`${this.errorMessage}`, {
+            position: "top",
+            duration: 3000,
+            dismissible: true,
+          });
+      this.$emit("cerrarDialog");
+    },
+  },
+  computed: {
+    ...mapState('Admin' , ['errorMessage'])
   },
 };
 </script>

@@ -91,17 +91,17 @@ const router = new VueRouter({
   routes,
 })
 
-router.beforeEach((to, from, next) => {
-  let user = firebase.auth().currentUser;
-  let authRequired = to.matched.some(route => route.meta.login);
+// router.beforeEach((to, from, next) => {
+//   let user = firebase.auth().currentUser;
+//   let authRequired = to.matched.some(route => route.meta.login);
 
-  if (!user && authRequired) {
-    next({ name: 'Login' })
-  }
-  else {
-    next()
-  }
-})
+//   if (!user && authRequired) {
+//     next({ name: 'Login' })
+//   }
+//   else {
+//     next()
+//   }
+// })
 
 router.scrollBehavior = (to, from, savedPosition) => {
   return { x: 0, y: 0 }

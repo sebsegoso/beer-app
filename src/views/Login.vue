@@ -1,14 +1,5 @@
 <template>
   <div id="Login">
-    <v-snackbar v-model="snackbar" :timeout="5000">
-      {{errorMessage}}
-      <template v-slot:action="{ attrs }">
-        <v-btn color="warning" text v-bind="attrs" @click="snackbar = false">
-          X
-        </v-btn>
-      </template>
-    </v-snackbar>
-
     <h1>Login</h1>
     <v-container class="mx-auto">
       <v-form v-model="valid" class="form elevation-5 rounded-xl">
@@ -86,11 +77,9 @@ export default {
     rules: {
       required: (value) => !!value || "Contraseña requerida",
     },
-    snackbar: false,
-
   }),
   computed: {
-    ...mapState('Admin', ['errorMessage']),
+    ...mapState("Admin", ["errorMessage"]),
     disabledlogin() {
       if (this.user.email.trim() == "" || this.user.password.trim() == "")
         return true;
@@ -101,7 +90,13 @@ export default {
     ...mapActions("Admin", ["signInWithEmailAndPass"]),
     async signIn() {
       let login = await this.signInWithEmailAndPass(this.user);
-      !login ? this.snackbar = true : true;
+      login
+        ? true
+        : this.$toast.error(`${this.errorMessage}`, {
+            position: "top",
+            duration: 3000,
+            dismissible: true,
+          });
     },
   },
 };

@@ -1,6 +1,6 @@
 <template>
   <div>
-  <!-- MODAL -->
+    <!-- MODAL -->
     <v-dialog v-model="dialogWindow" max-width="100%">
       <v-container fluid>
         <FormEdit :producto="productoAEditar" @cerrarDialog="closeDialog" />
@@ -109,9 +109,24 @@ export default {
       this.dialogWindow = true;
       this.productoAEditar = JSON.parse(JSON.stringify(item));
     },
-    borrarProducto(item) {
+    async borrarProducto(item) {
       let deseaEliminar = confirm(`Desea eliminar: ${item.data.nombre} ?`);
-      deseaEliminar ? this.deleteProduct(item.id) : false;
+
+      if (deseaEliminar) {
+        let eliminar = await this.deleteProduct(item.id);
+
+        eliminar
+          ? this.$toast.success(`Producto eliminado`, {
+              position: "top",
+              duration: 3000,
+              dismissible: true,
+            })
+          : this.$toast.error(`${this.errorMessage}`, {
+              position: "top",
+              duration: 3000,
+              dismissible: true,
+            });
+      }
     },
     closeDialog() {
       this.dialogWindow = false;
@@ -119,6 +134,7 @@ export default {
   },
   computed: {
     ...mapState("Products", ["cervezas"]),
+    ...mapState("Admin", ["errorMessage"]),
   },
 };
 </script>

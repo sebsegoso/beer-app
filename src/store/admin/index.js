@@ -40,29 +40,50 @@ export default {
                     .firestore()
                     .collection('cervezas')
                     .add(product);
-            } catch { error => console.log(error) }
-        },
-        deleteProduct({ commit }, id) {
-            firebase
-                .firestore()
-                .collection('cervezas')
-                .doc(id)
-                .delete()
-                .then(() => alert('Producto eliminado'))
-        },
-        updateProduct({ commit }, producto) {
-            let data = producto.data
-            data.ABV = Number(data.ABV)
-            data.IBU = Number(data.IBU)
-            data.volumen = Number(data.volumen)
-            data.stock = Number(data.stock)
-            data.precio = Number(data.precio)
 
-            firebase
-                .firestore()
-                .collection('cervezas')
-                .doc(producto.id)
-                .update(data)
+                return true
+
+            } catch (error) {
+                commit('ERROR', error.message)
+                return false
+            }
+        },
+        async deleteProduct({ commit }, id) {
+            try {
+                let borrar = await firebase
+                    .firestore()
+                    .collection('cervezas')
+                    .doc(id)
+                    .delete();
+
+                return true
+            } catch (error) {
+                commit('ERROR', error.message)
+                return false
+            }
+
+
+        },
+        async updateProduct({ commit }, producto) {
+            try {
+                let data = producto.data
+                data.ABV = Number(data.ABV)
+                data.IBU = Number(data.IBU)
+                data.volumen = Number(data.volumen)
+                data.stock = Number(data.stock)
+                data.precio = Number(data.precio)
+
+                let editar = await firebase
+                    .firestore()
+                    .collection('cervezas')
+                    .doc(producto.id)
+                    .update(data);
+
+                return true
+            } catch (error) {
+                commit('ERROR', error.message)
+                return false
+            }
         },
         //PEDIDOS
         getPedidos({ commit }) {
@@ -81,19 +102,33 @@ export default {
                     commit("GET_ORDERS", pedidos)
                 })
         },
-        pedidoEntregado({ commit }, id) {
-            firebase
-                .firestore()
-                .collection('pedidos')
-                .doc(id)
-                .update({ entregado: true })
+        async pedidoEntregado({ commit }, id) {
+            try {
+                await firebase
+                    .firestore()
+                    .collection('pedidos')
+                    .doc(id)
+                    .update({ entregado: true });
+
+                return true
+            } catch (error) {
+                commit('ERROR', error.message)
+                return false
+            }
         },
-        pedidoNoEntregado({ commit }, id) {
-            firebase
-                .firestore()
-                .collection('pedidos')
-                .doc(id)
-                .update({ entregado: false })
+        async pedidoNoEntregado({ commit }, id) {
+            try {
+                await firebase
+                    .firestore()
+                    .collection('pedidos')
+                    .doc(id)
+                    .update({ entregado: false });
+
+                return true
+            } catch (error) {
+                commit('ERROR', error.message)
+                return false
+            }
         },
         //COMENTARIOS-------------------
         getComments({ commit }) {
@@ -112,13 +147,19 @@ export default {
                     commit("GET_COMMENTS", comentarios)
                 })
         },
-        deleteComment({ commit }, id) {
-            firebase
-                .firestore()
-                .collection('comentarios')
-                .doc(id)
-                .delete()
-                .then(() => alert('Comentario eliminado'))
+        async deleteComment({ commit }, id) {
+            try {
+                await firebase
+                    .firestore()
+                    .collection('comentarios')
+                    .doc(id)
+                    .delete();
+
+                return true;
+            } catch (error) {
+                commit('ERROR', error.message)
+                return false;
+            }
         },
         //AUTH
         async createUSer({ commit }, user) {
@@ -158,12 +199,9 @@ export default {
                 router.push({ name: 'Admin' })
                 return true;
             }
-            catch {
-                error => {
-                    console.log(error)
-                    commit('ERROR', error.message)
-                    return false
-                }
+            catch (error) {
+                commit('ERROR', error.message)
+                return false
             }
 
         },

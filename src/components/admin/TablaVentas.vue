@@ -1,11 +1,13 @@
 <template>
   <div>
-  <!--MODAL DETALLE-->
+    <!--MODAL DETALLE-->
     <v-dialog v-model="modalDetalle" v-if="pedido">
       <v-card>
         <v-card-actions>
           <div class="ml-auto rounded-xl">
-            <v-btn @click="modalDetalle = false" fab x-small dark color="black">X</v-btn>
+            <v-btn @click="modalDetalle = false" fab x-small dark color="black"
+              >X</v-btn
+            >
           </div>
         </v-card-actions>
         <h3 class="text-center" v-if="pedido">
@@ -37,6 +39,7 @@
       :items="pedidos"
       :items-per-page="10"
       class="elevation-10 rounded-lg"
+      no-data-text="No hay pedidos que mostrar"
     >
       <!--EDITANDO COLUMNAS -->
       <template v-slot:item.data.nombre="{ item }">
@@ -61,9 +64,9 @@
         ${{ item.data.total }}
       </template>
 
-      <template v-slot:item.data.entregado="{ item }">
+      <!--<template v-slot:item.data.entregado="{ item }">
         {{ item.data.entregado ? "Sí" : "No" }}
-      </template>
+      </template>-->
 
       <template v-slot:item.detalle="{ item }">
         <v-btn x-small light @click="verDetalle(item)"
@@ -75,7 +78,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 import TablaDetallePedido from "@/components/TablaDetallePedido";
 
 export default {
@@ -125,10 +128,10 @@ export default {
         //   text: "Medio de pago",
         //   value: "data.medioDePago",
         // },
-        {
-          text: "Entregado",
-          value: "data.entregado",
-        },
+        // {
+        //   text: "Entregado",
+        //   value: "data.entregado",
+        // },
         {
           text: "Detalle",
           value: "detalle",
@@ -139,6 +142,7 @@ export default {
     };
   },
   computed: {
+    ...mapState("Admin", ["errorMessage"]),
     direccion(direccion) {
       return `${direccion.calle} ${direccion.numero} , ${direccion.departamento} , ${direccion.comuna}`;
     },
@@ -150,17 +154,45 @@ export default {
       this.pedido = item.data;
       this.modalDetalle = true;
     },
-    entregado(id) {
-      this.pedidoEntregado(id);
-      this.modalDetalle = false;
-      this.pedido.entregado = true;
+    async entregado(id) {
+      const entregado = await this.pedidoEntregado(id);
+      if (entregado) {
+        this.modalDetalle = false;
+        this.pedido.entregado = true;
 
+        this.$toast.success(`Pedido de: "${this.pedido.nombre} ${this.pedido.apellidos}" entregado`, {
+          position: "top",
+          duration: 5000,
+          dismissible: true,
+        });
+
+      } else {
+        this.$toast.error(`${this.errorMessage}`, {
+          position: "top",
+          duration: 5000,
+          dismissible: true,
+        });
+      }
     },
-    noEntregado(id) {
-      this.pedidoNoEntregado(id);
-      this.modalDetalle = false;
-      this.pedido.entregado = false;
+    async noEntregado(id) {
+      const noEntregado = await this.pedidoNoEntregado(id);
+      if (noEntregado) {
+        this.modalDetalle = false;
+        this.pedido.entregado = false;
 
+        this.$toast.default(`Pedido de: "${this.pedido.nombre} ${this.pedido.apellidos}" NO entregado`, {
+          position: "top",
+          duration: 5000,
+          dismissible: true,
+        });
+
+      } else {
+        this.$toast.error(`${this.errorMessage}`, {
+          position: "top",
+          duration: 5000,
+          dismissible: true,
+        });
+      }
     },
   },
 };

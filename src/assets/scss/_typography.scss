@@ -1,45 +1,47 @@
-h1{
-    font-size: $text-title;
-    font-weight: 300;
+h1 {
+  font-size: $text-title;
+  font-weight: 300;
 }
 
-h2{
-    font-size: $text-header;
-    font-weight: 700;
+h2 {
+  font-size: $text-header;
+  font-weight: 700;
 }
 
-h3 , h4{
-    font-weight: 500;
+h3,
+h4 {
+  font-weight: 500;
 }
 
-h3{
-    font-size: $text-title;
+h3 {
+  font-size: $text-title;
 }
 
-h4{
-    font-size: $text-title2;
+h4 {
+  font-size: $text-title2;
 }
 
-h5 , h6{
-    font-weight: 400;
+h5,
+h6 {
+  font-weight: 400;
 }
 
-h5{
-    font-size: $text-headline;
+h5 {
+  font-size: $text-headline;
 }
 
-h6{
-    font-size: $text-body;
+h6 {
+  font-size: $text-body;
 }
 
 @media (min-width: 576px) {
-    h1{
-        font-size: $text-display;
-    }
+  h1 {
+    font-size: $text-display;
+  }
 }
 
-#App{
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap');
-    font-family: 'Ubuntu', sans-serif;
-
+#App , .v-toast {
+  @import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap");
+  font-family: "Ubuntu", sans-serif;
 }
+

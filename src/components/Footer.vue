@@ -137,6 +137,11 @@ export default {
 
       if (validacion) {
         await this.sendFeedback(comentario);
+        this.$toast.success("Mensaje enviado", {
+          position: "bottom",
+          duration: 3000,
+          dismissible: true,
+        });
         this.$refs.formFooter.reset();
       }
     },

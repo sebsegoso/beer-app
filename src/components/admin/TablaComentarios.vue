@@ -1,16 +1,16 @@
 <template>
   <v-data-table
     dark
-    dense
     :headers="headers"
     :items="comentarios"
     :items-per-page="10"
     class="elevation-10 rounded-lg"
+    no-data-text="No hay comentarios"
   >
 
     <template v-slot:item.eliminar="{ item }">
         
-        <v-btn color="red" x-small @click="deleteComment(item.id)">
+        <v-btn color="red" x-small @click="borrarComentario(item.id)">
             <v-icon dark> mdi-trash-can-outline </v-icon>
         </v-btn>
     </template>
@@ -46,13 +46,28 @@ export default {
             value: 'eliminar'
         }
       ],
+      sortDesc : true
     };
   },
   computed: {
-      ...mapState('Admin' , ['comentarios'])
+      ...mapState('Admin' , ['comentarios' , 'errorMessage'])
   },
   methods: {
-      ...mapActions('Admin' , ['deleteComment'])
+      ...mapActions('Admin' , ['deleteComment']),
+      async borrarComentario(id){
+        const borrar = await this.deleteComment(id)
+        borrar ?
+        this.$toast.success(`Comentario eliminado`, {
+          position: "top",
+          duration: 3000,
+          dismissible: true,
+        })
+        : this.$toast.error(`${this.errorMessage}`, {
+          position: "top",
+          duration: 3000,
+          dismissible: true,
+        });
+      }
   },
 };
 </script>

@@ -1,9 +1,11 @@
 // https://docs.cypress.io/api/introduction/api.html
 
-describe('My First Test', () => {
-  it('Visits the app root url', () => {
-    cy.visit('/')
-    cy.contains('h1', 'Las mejores cervezas artesanales, directo a tu puerta')
+describe('Testeando Inicio de sesión', () => {
+  it('Login', () => {
+    cy.visit('/login')
+    cy.get('#EmailLogin').type('admin@beerapp.cl')
+    cy.get('#PasswordLogin').type('123456')
+    cy.get('#BtnLogin').click()
   })
 })
 

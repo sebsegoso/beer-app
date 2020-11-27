@@ -22,13 +22,13 @@ const routes = [
     path: '/cervezas/:cerveceria',
     name: 'Cerveceria',
     props: true,
-    component: () => import(/* webpackChunkName: "Carro" */ '../views/Cerveceria.vue')
+    component: () => import(/* webpackChunkName: "Cerveceria" */ '../views/Cerveceria.vue')
   },
   {
     path: '/cervezas/:cerveceria/:detallecerveza',
     name: 'DetalleCerveza',
     props: true,
-    component: () => import(/* webpackChunkName: "Carro" */ '../views/DetalleCerveza.vue')
+    component: () => import(/* webpackChunkName: "DetalleCerveza" */ '../views/DetalleCerveza.vue')
   },
   {
     path: '/carro',
@@ -52,7 +52,7 @@ const routes = [
     meta: {
       login: true
     },
-    component: () => import(/* webpackChunkName: "admin" */ '../views/Admin/')
+    component: () => import(/* webpackChunkName: "Admin" */ '../views/Admin/')
   },
   {
     path: '/admin/comentarios',
@@ -60,7 +60,7 @@ const routes = [
     meta: {
       login: true
     },
-    component: () => import(/* webpackChunkName: "comentarios" */ '../views/Admin/Comentarios.vue')
+    component: () => import(/* webpackChunkName: "Comentarios" */ '../views/Admin/Comentarios.vue')
   },
   {
     path: '/admin/pedidos',
@@ -68,7 +68,7 @@ const routes = [
     meta: {
       login: true
     },
-    component: () => import(/* webpackChunkName: "pedidos" */ '../views/Admin/Pedidos.vue')
+    component: () => import(/* webpackChunkName: "Pedidos" */ '../views/Admin/Pedidos.vue')
   },
   {
     path: '/admin/crear-usuario',
@@ -88,7 +88,7 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
 })
 
 router.beforeEach((to, from, next) => {
@@ -102,5 +102,9 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
+
+router.scrollBehavior = (to, from, savedPosition) => {
+  return { x: 0, y: 0 }
+}
 
 export default router

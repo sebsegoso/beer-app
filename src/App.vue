@@ -19,7 +19,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import MenuAdmin from "@/components/admin/TabsMenu";
 
-import { mapActions } from "vuex";
+import {mapMutations, mapActions } from "vuex";
 export default {
   name: "App",
   components: {
@@ -38,13 +38,14 @@ export default {
   methods: {
     ...mapActions("Products", ["getData", "getCervecerias"]),
     ...mapActions("Admin", ["getComments", "getPedidos"]),
-    // ...mapActions('Cart', ['getCarrito'])
+    // ...mapMutations(['LOADING' , 'NOT_LOADING'])
   },
-  created() {
-    this.getData();
-    this.getComments();
-    this.getCervecerias();
-    this.getPedidos();
+  async created() {
+    await this.getData();
+    await this.getComments();
+    await this.getCervecerias();
+    await this.getPedidos();
+
     // this.getCarrito()
   },
 };

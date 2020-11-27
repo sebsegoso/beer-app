@@ -22,45 +22,55 @@
             <h2>Déjanos tu feedback!</h2>
             <v-form v-model="valid">
               <v-container>
-                <v-row>
-                  <v-col cols="12" md="6">
-                    <v-text-field
-                      dense
-                      light
-                      outlined
-                      v-model="nombre"
-                      :rules="nameRules"
-                      :counter="30"
-                      label="Nombre"
-                      required
-                    ></v-text-field>
-                  </v-col>
+                <v-form ref="formFooter" lazy-validation v-model="valid">
+                  <v-row>
+                    <v-col cols="12" md="6">
+                      <v-text-field
+                        dense
+                        light
+                        outlined
+                        v-model="nombre"
+                        :rules="nameRules"
+                        :counter="30"
+                        label="Nombre"
+                        required
+                        validateOnBlur
+                      ></v-text-field>
+                    </v-col>
 
-                  <v-col cols="12" md="6">
-                    <v-text-field
-                      dense
-                      light
-                      outlined
-                      v-model="email"
-                      :rules="emailRules"
-                      label="Correo electrónico"
-                      required
-                    ></v-text-field>
-                  </v-col>
+                    <v-col cols="12" md="6">
+                      <v-text-field
+                        dense
+                        light
+                        outlined
+                        type="email"
+                        v-model="email"
+                        :rules="emailRules"
+                        label="Correo electrónico"
+                        required
+                        validateOnBlur
+                      ></v-text-field>
+                    </v-col>
 
-                  <v-col cols="12">
-                    <v-textarea
-                      dense
-                      light
-                      outlined
-                      v-model="comentario"
-                      counter
-                      label="Déjanos tu comentario..."
-                      rows="2"
-                    ></v-textarea>
-                  </v-col>
-                </v-row>
-                <v-btn @click="enviarComentario">Enviar</v-btn>
+                    <v-col cols="12">
+                      <v-textarea
+                        dense
+                        light
+                        outlined
+                        v-model="comentario"
+                        :rules="comentarioRules"
+                        counter
+                        label="Déjanos tu comentario..."
+                        rows="2"
+                        validateOnBlur
+                        hint="Consultas, reclamos o sugerencias"
+                      ></v-textarea>
+                    </v-col>
+                  </v-row>
+                  <v-btn :disabled="formDisabled" @click="enviarComentario"
+                    >Enviar</v-btn
+                  >
+                </v-form>
               </v-container>
             </v-form>
           </v-container>
@@ -78,18 +88,21 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import { mapActions } from "vuex";
 export default {
   name: "Footer",
   data() {
     return {
-      valid: false,
+      valid: true,
       nombre: "",
       email: "",
       comentario: "",
       nameRules: [
         (v) => !!v || "Nombre requerido",
-        (v) => v.length <= 30 || "El nombre debe contener máximo 30 caracteres",
+        (v = "") =>
+          v.length >= 3 || "El nombre debe contener al menos 3 caracteres",
+        (v = "") =>
+          v.length <= 30 || "El nombre debe contener máximo 30 caracteres",
       ],
       emailRules: [
         (v) => !!v || "Correo electrónico requerido",
@@ -97,26 +110,52 @@ export default {
           /.+@.+/.test(v) ||
           "El formato del correo electrónico ingresado no es válido",
       ],
+      comentarioRules: [
+        (v) => !!v || "Comentario requerido",
+        (v = "") =>
+          v.length >= 30 ||
+          "Tu comentario debe contener al menos 30 caracteres",
+        (v = "") => v.length <= 300 || "Máximo 300 caracteres",
+      ],
     };
   },
   methods: {
-      ...mapActions('Feedback' , ['sendFeedback']),
+    ...mapActions("Feedback", ["sendFeedback"]),
     async enviarComentario() {
-        let date = new Date()
-        let fecha =  date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear()
+      const date = new Date();
+      const fecha =
+        date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
 
-        let comentario = {
+      const comentario = {
         nombre: this.nombre,
         email: this.email,
         comentario: this.comentario,
-        fecha
+        fecha,
+      };
+
+      const validacion = this.validar();
+
+      if (validacion) {
+        await this.sendFeedback(comentario);
+        this.$refs.formFooter.reset();
       }
-
-      await this.sendFeedback(comentario)
-
-      this.nombre = ""
-      this.email = ""
-      this.comentario = ""
+    },
+    validar() {
+      return this.$refs.formFooter.validate();
+    },
+  },
+  computed: {
+    formDisabled() {
+      if (
+        this.nombre == undefined ||
+        this.email == undefined ||
+        this.comentario == undefined ||
+        this.nombre.trim() == "" ||
+        this.email.trim() == "" ||
+        this.comentario.trim() == ""
+      )
+        return true;
+      else return false;
     },
   },
 };
@@ -130,7 +169,7 @@ export default {
   color: $main-white;
   min-height: 150px;
   padding: 1rem 0 5% 0;
-  a{
+  a {
     color: $main-yellow;
   }
   p {

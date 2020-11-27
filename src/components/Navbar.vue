@@ -17,12 +17,6 @@
       <span>Cervezas</span>
       <v-icon>mdi-glass-mug-variant</v-icon>
     </v-btn>
-    <!--<v-divider vertical></v-divider>
-    <v-btn>
-        <span>Buscar</span>
-
-        <v-icon>mdi-magnify</v-icon>
-    </v-btn>-->
 
     <v-divider vertical></v-divider>
 
@@ -36,13 +30,6 @@
         <v-icon>mdi-cart</v-icon>
       </v-badge>
     </v-btn>
-    <!--
-    <v-divider vertical></v-divider>
-
-    <v-btn>
-        <span>Mi cuenta</span>
-        <v-icon>mdi-account-circle</v-icon>
-    </v-btn>-->
   </v-bottom-navigation>
 </template>
 

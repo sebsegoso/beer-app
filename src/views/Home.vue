@@ -5,72 +5,91 @@
         <h1>Las mejores cervezas artesanales, directo a tu puerta</h1>
       </v-container>
     </div>
+    <!--LOADER -->
+    <fulfilling-bouncing-circle-spinner
+      :animation-duration="4000"
+      :size="60"
+      color="#000"
+      v-if="loading"
+    />
     <!--CARRUSEL -->
-    <v-carousel cycle hide-delimiters show-arrows-on-hover>
-      <v-carousel-item
-        v-for="(n, i) in 2"
-        :key="i"
-        height="150"
-      >     
-      <v-sheet width="100%" height="100%" :style="{'backgroundImage':'url(https://st4.depositphotos.com/5389310/19992/v/1600/depositphotos_199920628-stock-illustration-wheat-beer-ads-flying-ingredients.jpg)'}">
-           <v-container class="d-flex flex-column justify-center" >
+    <div v-else>
+      <v-carousel cycle hide-delimiters show-arrows-on-hover>
+        <v-carousel-item v-for="(n, i) in 2" :key="i" height="150">
+          <v-sheet
+            width="100%"
+            height="100%"
+            :style="{
+              backgroundImage:
+                'url(https://st4.depositphotos.com/5389310/19992/v/1600/depositphotos_199920628-stock-illustration-wheat-beer-ads-flying-ingredients.jpg)',
+            }"
+          >
+            <v-container class="d-flex flex-column justify-center">
               <h2>Beba menos, beba mejor</h2>
-              <h3>Elige artesanal.</h3>          
+              <h3>Elige artesanal.</h3>
               <v-btn class="text-center" to="/Cervezas" x-large dark elevation="5"
                 >Ver todas las cervezas <v-icon>mdi-beer</v-icon>
-              </v-btn>  
-           </v-container>
-            
+              </v-btn>
+            </v-container>
+          </v-sheet>
+        </v-carousel-item>
+      </v-carousel>
       
-      </v-sheet>
-      </v-carousel-item>
-    </v-carousel>
-
-    <v-container class="pa-7 pa-md-1 mx-auto">
-      <!-- SLIDES -->
-
-      <h2 class="text-center">Cervezas nuevas</h2>
-
-      <v-slide-group class="main_slide pa-4" show-arrows="desktop" mobile-breakpoint="576px">
-        <v-slide-item
-          v-for="(cerveza, i) in cervezasNuevas"
-          :key="i"
-          class="px-3"
+      <v-container class="pa-7 pa-md-1 mx-auto">
+        <!-- SLIDES -->
+      
+        <h2 class="text-center">Cervezas nuevas</h2>
+      
+        <v-slide-group
+          class="main_slide pa-4"
+          show-arrows="desktop"
+          mobile-breakpoint="576"
         >
-          <Card :producto="cerveza" />
-        </v-slide-item>
-      </v-slide-group>
-
-      <v-divider light class="my-15" />
-
-      <h2 class="text-center">Cervecerías</h2>
-      <v-slide-group class="main_slide pa-4" show-arrows="desktop" mobile-breakpoint="576px">
-        <div class="cervecerias_slider mx-auto">
-          <v-slide-item v-for="(cerveceria, i) in cervecerias" :key="i">
-            <router-link :to="`/Cervezas/${cerveceria.data.nombre.trim()}`">
-              <v-img
-                class="card_home cerveceria_img ma-4 rounded-xl"
-                :src="cerveceria.data.img"
-                alt="logo cervecería"
-              ></v-img>
-            </router-link>
+          <v-slide-item
+            v-for="(cerveza, i) in cervezasNuevas"
+            :key="i"
+            class="px-3"
+          >
+            <Card :producto="cerveza" />
           </v-slide-item>
+        </v-slide-group>
+      
+        <v-divider light class="my-15" />
+      
+        <h2 class="text-center">Cervecerías</h2>
+        <v-slide-group
+          class="main_slide pa-4"
+          show-arrows="desktop"
+          mobile-breakpoint="576"
+        >
+          <div class="cervecerias_slider mx-auto">
+            <v-slide-item v-for="(cerveceria, i) in cervecerias" :key="i">
+              <router-link :to="`/Cervezas/${cerveceria.data.nombre.trim()}`">
+                <v-img
+                  class="card_home cerveceria_img ma-4 rounded-xl"
+                  :src="cerveceria.data.img"
+                  alt="logo cervecería"
+                ></v-img>
+              </router-link>
+            </v-slide-item>
+          </div>
+        </v-slide-group>
+      
+        <v-divider light class="my-15" />
+      
+        <div class="text-center py-5">
+          <v-btn class="text-center" to="/Cervezas" x-large dark elevation="5"
+            >Ver todas las cervezas <v-icon>mdi-beer</v-icon>
+          </v-btn>
         </div>
-      </v-slide-group>
-
-      <v-divider light class="my-15" />
-
-      <div class="text-center py-5">
-        <v-btn class="text-center" to="/Cervezas" x-large dark elevation="5"
-          >Ver todas las cervezas <v-icon>mdi-beer</v-icon>
-        </v-btn>
-      </div>
-      <v-divider light class="my-15" />
-    </v-container>
+        <v-divider light class="my-15" />
+      </v-container>
+    </div>
   </div>
 </template>
 
 <script>
+import { FulfillingBouncingCircleSpinner } from "epic-spinners";
 import { mapState, mapGetters } from "vuex";
 // @ is an alias to /src
 import Card from "@/components/Card";
@@ -78,7 +97,7 @@ import Card from "@/components/Card";
 export default {
   name: "Home",
   components: {
-    Card,
+    Card,FulfillingBouncingCircleSpinner
   },
   data() {
     return {
@@ -92,6 +111,7 @@ export default {
   computed: {
     ...mapGetters("Products", ["cervezasNuevas", "cervecerias"]),
     ...mapState("Products", ["cervecerias"]),
+    ...mapState(["loading"]),
   },
 };
 </script>

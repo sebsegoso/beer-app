@@ -40,7 +40,7 @@
     <!-- CERVEZAS -->
     <v-container class="pag_body pa-md-1 mx-auto pa-0">
       <v-row>
-        <v-col v-for="(cerveza, i) in buscar" :key="i" cols="6" :md="3" :xl="2" class="d-flex">
+        <v-col v-for="(cerveza, i) in buscar" :key="i" cols="6" :md="3" :xl="2">
           <Card :producto="cerveza" />
         </v-col>
       </v-row>

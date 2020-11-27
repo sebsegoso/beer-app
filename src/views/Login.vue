@@ -27,6 +27,7 @@
                 type="email"
                 dark
                 required
+                id="EmailLogin"
               ></v-text-field>
             </v-col>
             <!--INPUT PASSWORD-->
@@ -40,12 +41,14 @@
                 name="input-10-1"
                 label="Contraseña"
                 @click:append="show1 = !show1"
+                id="PasswordLogin"
               ></v-text-field>
             </v-col>
             <!--BUTTONS -->
             <v-col cols="12">
               <v-btn
                 class="boton"
+                id="BtnLogin"
                 elevation="10"
                 color="#efc251"
                 dark

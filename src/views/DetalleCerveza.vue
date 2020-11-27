@@ -13,7 +13,10 @@
           />
         </v-col>
         <v-col cols="12" md="8">
-          <router-link :to="`/cervezas/${cerveza.data.cerveceria}`" class="cerveza_content_link">
+          <router-link
+            :to="`/cervezas/${cerveza.data.cerveceria}`"
+            class="cerveza_content_link"
+          >
             <h2>{{ cerveza.data.cerveceria }}</h2>
           </router-link>
           <div class="wrapper_variedad_precio">
@@ -45,9 +48,29 @@
           </ul>
           <br />
 
-          <v-btn v-if="cerveza.data.stock <= 0" class="elevation-5" x-large light disabled>Producto agotado</v-btn>
-          <v-btn v-else-if="!cerveza.data.cart" @click="anadirAlCarrito(cerveza.id)"  class="elevation-5" x-large><v-icon>mdi-cart</v-icon> Agregar a mi carro</v-btn> 
-          <v-btn v-else @click="quitarDelCarrito(cerveza.id)" class="elevation-5" x-large dark ><v-icon>mdi-check</v-icon> Producto agregado al carro</v-btn>
+          <v-btn
+            v-if="cerveza.data.stock <= 0"
+            class="elevation-5"
+            x-large
+            light
+            disabled
+            >Producto agotado</v-btn
+          >
+          <v-btn
+            v-else-if="!cerveza.data.cart"
+            @click="anadirAlCarrito(cerveza.id)"
+            class="elevation-5"
+            x-large
+            ><v-icon>mdi-cart</v-icon> Agregar a mi carro</v-btn
+          >
+          <v-btn
+            v-else
+            @click="quitarDelCarrito(cerveza.id)"
+            class="elevation-5"
+            x-large
+            dark
+            ><v-icon>mdi-check</v-icon> Producto agregado al carro</v-btn
+          >
         </v-col>
       </v-row>
     </v-container>
@@ -55,7 +78,7 @@
 </template>
 
 <script>
-import { mapGetters , mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "DetalleCerveza",
   props: ["detallecerveza"],
@@ -66,8 +89,7 @@ export default {
     return `${this.cerveza.data.nombre} - ${this.cerveza.data.cerveceria}`;
   },
   methods: {
-      ...mapActions('Cart' , ['anadirAlCarrito' ,'quitarDelCarrito'])
-
+    ...mapActions("Cart", ["anadirAlCarrito", "quitarDelCarrito"]),
   },
   computed: {
     ...mapGetters("Products", ["detalleCerveza"]),
@@ -76,9 +98,9 @@ export default {
       const cervezaPath = this.detallecerveza;
       return this.detalleCerveza(cervezaPath);
     },
-    precio(){
-      return this.precioEnMiles(this.cerveza.data.precio)
-    }
+    precio() {
+      return this.precioEnMiles(this.cerveza.data.precio);
+    },
   },
 };
 </script>
@@ -88,8 +110,18 @@ export default {
 
 .cerveza_content {
   padding: 15px 0 40px 0;
-  &_link{
+  &_link {
     color: $main-black;
+    // animation-name: intermitente;
+    text-shadow: 0 0 0 $main-black;
+    transition: text-shadow .5s;
+
+    &:hover {
+      animation-duration: 1.5s;
+      animation-iteration-count: infinite;
+      animation-fill-mode: backwards;
+      text-shadow: -3px -3px 5px $main-white;
+    }
   }
 
   &_img {

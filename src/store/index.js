@@ -10,12 +10,18 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    loading: false
   },
   mutations: {
-    
+    LOADING(state) {
+      state.loading = true;
+    },
+    NOT_LOADING(state) {
+      state.loading = false;
+    }
   },
   actions: {
-    
+
   },
   getters: {
     precioEnMiles: () => (numero) => {
@@ -25,6 +31,6 @@ export default new Vuex.Store({
     }
   },
   modules: {
-    Admin, Products, Cart , Feedback
+    Admin, Products, Cart, Feedback
   }
 })

@@ -3,7 +3,8 @@ export default {
     namespaced: true,
     state: {
         carrito: [],
-        pedido: {}
+        pedido: {},
+        errorMessage: ''
     },
     mutations: {
         ADDED_TO_CART(state, cerveza) {
@@ -39,17 +40,11 @@ export default {
             state.pedido = pedido
             console.log("Pedido realizado: ", state.pedido)
         },
-        // GET_CART_FROM_LOCALSTORAGE(state , carrito){
-        //     state.carrito = carrito
-        // }
+        ERROR(state, error) {
+            state.errorMessage = error
+        }
     },
     actions: {
-        // getCarrito({commit}){ //bug con valor de data.cart
-        //     let carritoLS = JSON.parse(localStorage.getItem('carrito'));
-        //     if(carritoLS){
-        //         commit('GET_CART_FROM_LOCALSTORAGE' , carritoLS)
-        //     }            
-        // },
         anadirAlCarrito({ commit, rootState }, id) {
             let cervezaAnadida = rootState.Products.cervezas.find(cerveza => cerveza.id === id);
             commit('ADDED_TO_CART', cervezaAnadida)
@@ -67,16 +62,21 @@ export default {
             commit('SUBSTRACT_ITEM', buscarEnCarrito)
         },
         async pedidoFinalizado({ commit, state }, pedido) {
-            const db = firebase.firestore()
-            //cargar pedido
-            let venta = await db.collection('pedidos').add(pedido)
-            pedido.id = venta.id
-            commit('ORDER_DONE', pedido)
-            //Descontar de stock
-            state.pedido.productos.forEach(p => {
-                db.collection('cervezas').doc(p.id).update({ stock: p.producto.stock - p.cantidad })
-            })
-
+            try {
+                const db = firebase.firestore()
+                //cargar pedido
+                let venta = await db.collection('pedidos').add(pedido)
+                pedido.id = venta.id
+                commit('ORDER_DONE', pedido)
+                //Descontar de stock
+                state.pedido.productos.forEach(p => {
+                    db.collection('cervezas').doc(p.id).update({ stock: p.producto.stock - p.cantidad })
+                })
+                return true
+            } catch (error) {
+                commit('ERROR', error.message)
+                return false
+            }
         },
     },
     getters: {

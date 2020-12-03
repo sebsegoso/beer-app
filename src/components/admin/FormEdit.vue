@@ -96,6 +96,7 @@
             label="Stock"
             required
             outlined
+            id="EditStock"
           />
         </v-col>
         <v-col cols="4" md="2">
@@ -139,7 +140,7 @@
         </v-col>
 
         <v-col cols="12">
-          <v-btn color="success" @click="editarProducto(producto)">
+          <v-btn color="success" @click="editarProducto(producto)" id="ConfirmarEdicion">
             <v-icon>mdi-pencil</v-icon> CONFIRMAR EDICIÓN
           </v-btn>
         </v-col>

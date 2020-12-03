@@ -1,6 +1,6 @@
 <template>
   <v-app id="App">
-    <div  v-if="!login">
+    <div v-if="!login">
       <MenuAdmin v-if="admin" />
     </div>
     <!--MAIN -->
@@ -17,9 +17,9 @@
 <script>
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import MenuAdmin from "@/components/admin/TabsMenu";
+import MenuAdmin from "@/components/admin/AdminNavbar";
 
-import {mapMutations, mapActions } from "vuex";
+import { mapMutations, mapActions } from "vuex";
 export default {
   name: "App",
   components: {
@@ -29,31 +29,64 @@ export default {
   },
   computed: {
     admin() {
-      return this.$route.fullPath.includes("/admin") || this.$route.fullPath.includes("/login") ;
+      return (
+        this.$route.fullPath.includes("/admin") ||
+        this.$route.fullPath.includes("/login")
+      );
     },
     login() {
       return this.$route.name == "Login";
     },
   },
   methods: {
-    ...mapActions("Products", ["getData", "getCervecerias"]),
-    ...mapActions("Admin", ["getComments", "getPedidos"]),
+    ...mapActions("Products", ["getData", "getCervecerias", "errorMessagePr"]),
+    ...mapActions("Admin", ["getComments", "getPedidos" , "errorMessage"]),
     // ...mapMutations(['LOADING' , 'NOT_LOADING'])
   },
   async created() {
-    await this.getData();
-    await this.getComments();
-    await this.getCervecerias();
-    await this.getPedidos();
+    let cervezas = await this.getData();
+    let cervecerias = await this.getCervecerias();
+    let comentarios = await this.getComments();
+    let pedidos = await this.getPedidos();
 
-    // this.getCarrito()
+    cervezas
+      ? true
+      : this.$toast.error(`${this.errorMessagePr}`, {
+          position: "top",
+          duration: 5000,
+          dismissible: true,
+        });
+
+    cervecerias
+      ? true
+      : this.$toast.error(`${this.errorMessagePr}`, {
+          position: "top",
+          duration: 5000,
+          dismissible: true,
+        });
+
+    comentarios
+      ? true
+      : this.$toast.error(`${this.errorMessage}`, {
+          position: "top",
+          duration: 5000,
+          dismissible: true,
+        });
+
+    pedidos
+      ? true
+      : this.$toast.error(`${this.errorMessage}`, {
+          position: "top",
+          duration: 5000,
+          dismissible: true,
+        });
   },
 };
 </script>
 
 <style lang="scss">
 @import "@/assets/scss/main.scss";
-#App{
+#App {
   min-height: 100vh;
 }
 </style>

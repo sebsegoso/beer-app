@@ -1,13 +1,18 @@
 <template>
   <div>
     <v-app-bar color="#000" dark>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon
+        id="BtnMenuAdmin"
+        @click.stop="drawer = !drawer"
+      ></v-app-bar-nav-icon>
       <h1>Admin</h1>
-      <v-spacer  v-if="cumpleanos"/>
-      <span v-if="cumpleanos"><b>Feliz cumpleaños {{usuario.name}}!</b></span>
+      <v-spacer v-if="cumpleanos" />
+      <span v-if="cumpleanos"
+        ><b>Feliz cumpleaños {{ usuario.name }}!</b></span
+      >
 
       <v-spacer />
-      <span>Usuario: {{ usuario.name}}</span>
+      <span id="NombreUsuarioAdmMenu">Usuario: {{ usuario.name }}</span>
     </v-app-bar>
 
     <v-navigation-drawer
@@ -19,31 +24,25 @@
       width="auto"
       class="rounded-r-xl elevation-10"
     >
-      <v-list v-if="usuario !== ''">
-      <v-list-item>
-          <v-list-item-title >{{ usuario.name }}</v-list-item-title>
+      <v-list>
+        <v-list-item>
+          <v-list-item-title>{{ usuario.name }}</v-list-item-title>
         </v-list-item>
         <v-list-item>
           <v-list-item-subtitle>{{ usuario.email }}</v-list-item-subtitle>
         </v-list-item>
         <v-list-item>
-          <v-btn @click="logOut" outlined color="red">
+          <v-btn id="BtnLogout" @click="logOut" outlined color="red">
             <v-icon>mdi-logout</v-icon>
             cerrar sesion
           </v-btn>
         </v-list-item>
       </v-list>
 
-      <v-list v-else>
-        <v-list-item>
-          <v-list-item-title> No has iniciado sesión </v-list-item-title>
-        </v-list-item>
-      </v-list>
-
       <v-divider></v-divider>
 
       <v-list nav>
-        <v-list-item :to="{ name: 'Admin' }">
+        <v-list-item :to="{ name: 'Productos' }" id="ToProductos">
           <v-list-item-icon>
             <v-icon>mdi-beer</v-icon>
           </v-list-item-icon>
@@ -52,21 +51,23 @@
 
         <v-list-item :to="{ name: 'Pedidos' }">
           <v-list-item-icon>
-            <v-icon>mdi-cart-check</v-icon>
-          </v-list-item-icon>
           <v-badge :content="noEntregados" :value="noEntregados" color="red">
-            <v-list-item-title>Pedidos</v-list-item-title>
+            <v-icon>mdi-cart-check</v-icon>
           </v-badge>
+          </v-list-item-icon>
+            <v-list-item-title>
+            Pedidos
+            </v-list-item-title>
         </v-list-item>
 
-        <v-list-item :to="{ name: 'Comentarios' }">
+        <v-list-item :to="{ name: 'Comentarios' }" id="ToComentarios">
           <v-list-item-icon>
             <v-icon>mdi-chat</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Comentarios</v-list-item-title>
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item :to="{ name: 'CrearUsuario' }">
+        <v-list-item :to="{ name: 'CrearUsuario' }" id="BtnCreateUser">
           <v-list-item-icon>
             <v-icon>mdi-account-plus</v-icon>
           </v-list-item-icon>
@@ -96,9 +97,13 @@ export default {
         date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
       return fecha;
     },
-    cumpleanos(){
-      return this.usuario.birthday.slice(0,5) == this.fecha.slice(0,5)
-    }
+    cumpleanos() {
+      const cumpleanos = this.usuario.birthday;
+
+      if (cumpleanos) {
+        return cumpleanos.slice(0, 5) == this.fecha.slice(0, 5);
+      } else return false;
+    },
   },
   methods: {
     ...mapActions("Admin", ["logOut"]),

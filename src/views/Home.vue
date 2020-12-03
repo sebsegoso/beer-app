@@ -44,6 +44,7 @@
           class="main_slide pa-4"
           show-arrows="desktop"
           mobile-breakpoint="576"
+          id="CervezasNuevas"
         >
           <v-slide-item
             v-for="(cerveza, i) in cervezasNuevas"

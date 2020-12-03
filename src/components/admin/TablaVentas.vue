@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--MODAL DETALLE-->
-    <v-dialog v-model="modalDetalle" v-if="pedido">
+    <v-dialog v-model="modalDetalle" v-if="pedido" class="dialogDetallePedido">
       <v-card>
         <v-card-actions>
           <div class="ml-auto rounded-xl">
@@ -20,7 +20,7 @@
         <TablaDetallePedido :pedido="pedido" />
         <v-card-actions>
           <div class="mx-auto">
-            <v-btn v-if="!pedido.entregado" dark @click="entregado(pedido.id)"
+            <v-btn v-if="!pedido.entregado" dark @click="entregado(pedido.id)" id="entregarPedido"
               >Marcar como entregado</v-btn
             >
             <v-btn v-else dark color="red" @click="noEntregado(pedido.id)"
@@ -69,7 +69,7 @@
       </template>-->
 
       <template v-slot:item.detalle="{ item }">
-        <v-btn x-small light @click="verDetalle(item)"
+        <v-btn x-small light @click="verDetalle(item)" :class="`DetallePedido${item.data.nombre}${item.data.telefono}`"
           ><v-icon>mdi-dots-horizontal</v-icon>Detalle</v-btn
         >
       </template>

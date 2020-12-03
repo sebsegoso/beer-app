@@ -4,7 +4,8 @@ export default {
     namespaced: true,
     state: {
         cervezas: [],
-        cervecerias: []
+        cervecerias: [],
+        errorMessagePr: ''
     },
     mutations: {
         GET_DATA(state, cervezas) {
@@ -12,38 +13,54 @@ export default {
         },
         GET_BREWERIES(state, cervecerias) {
             state.cervecerias = cervecerias;
+        },
+        ERROR(state, error) {
+            state.errorMessagePr = error
         }
     },
     actions: {
-        getData({ commit }) {
-            firebase
-                .firestore()
-                .collection('cervezas')
-                .onSnapshot(snap => {
-                    let cervezas = []
-                    snap.forEach(cerveza => {
-                        cervezas.push({
-                            data: cerveza.data(),
-                            id: cerveza.id
+        async getData({ commit }) {
+            try {
+                let getProducts = await firebase
+                    .firestore()
+                    .collection('cervezas')
+                    .onSnapshot(snap => {
+                        let cervezas = []
+                        snap.forEach(cerveza => {
+                            cervezas.push({
+                                data: cerveza.data(),
+                                id: cerveza.id
+                            })
                         })
-                    })
-                    commit('GET_DATA', cervezas)
-                });
+                        commit('GET_DATA', cervezas)
+                    });
+
+                return true
+            } catch (error) {
+                commit('ERROR', error.message)
+                return false
+            }
         },
-        getCervecerias({ commit }) {
-            firebase
-                .firestore()
-                .collection('cervecerias')
-                .onSnapshot(snap => {
-                    let cervecerias = []
-                    snap.forEach(cerveza => {
-                        cervecerias.push({
-                            data: cerveza.data(),
-                            id: cerveza.id
+        async getCervecerias({ commit }) {
+            try {
+                let getCervecerias = await firebase
+                    .firestore()
+                    .collection('cervecerias')
+                    .onSnapshot(snap => {
+                        let cervecerias = []
+                        snap.forEach(cerveza => {
+                            cervecerias.push({
+                                data: cerveza.data(),
+                                id: cerveza.id
+                            })
                         })
-                    })
-                    commit('GET_BREWERIES', cervecerias)
-                });
+                        commit('GET_BREWERIES', cervecerias)
+                    });
+                return true
+            } catch (error) {
+                commit('ERROR', error.message)
+                return false
+            }
         },
     },
     getters: {
@@ -57,6 +74,7 @@ export default {
         },
         detalleCerveza: (state) => (path) => {
             let cervezaElegida = state.cervezas.find(cerveza => cerveza.data.path == path) || { data: {} }
+
             return cervezaElegida
         },
         resultadoBusqueda: (state, getters) => (busqueda) => {

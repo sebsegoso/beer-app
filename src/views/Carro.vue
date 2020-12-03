@@ -27,6 +27,7 @@
               <div class="cart_item_quantity">
                 <v-row justify="space-between" align="center">
                   <v-btn
+                    id="RestarProducto"
                     fab
                     dark
                     x-small
@@ -37,6 +38,7 @@
                   </v-btn>
                   <span>{{ producto.data.cantidad }}</span>
                   <v-btn
+                    id="SumarProducto"
                     fab
                     dark
                     x-small
@@ -54,6 +56,7 @@
 
               <div class="cart_item_delete">
                 <v-btn
+                  id="EliminarProducto"
                   x-small
                   dark
                   fab
@@ -81,8 +84,7 @@ import Total from "@/components/Total.vue";
 export default {
   name: "Carro",
   data() {
-    return {
-    };
+    return {};
   },
   components: {
     Total,
@@ -99,12 +101,27 @@ export default {
     dismiuirCantidad(id) {
       this.descontarProducto(id);
     },
+    toastMaximoStock(nombre){
+      this.$toast.success(nombre , {
+          position: "top",
+          duration: 3000,
+          dismissible: true,
+        });
+    }
   },
   computed: {
     ...mapState("Cart", ["carrito"]),
     ...mapGetters(["precioEnMiles"]),
     precio() {
       return this.precioEnMiles(this.cerveza.data.precio);
+    },
+    alertaStock() {
+      console.log(this.carrito)
+      this.carrito.forEach(p => {
+        if(p.data.cantidad == p.data.stock){
+          this.toastMaximoStock(`${p.data.cerveceria} - ${p.data.nombre}`)
+        }
+      })
     },
   },
   title() {

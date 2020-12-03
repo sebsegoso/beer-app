@@ -19,13 +19,15 @@
               <v-checkbox
                 v-model="checkbox"
                 label="Los datos ingresados son correctos y deseo finalizar mi compra"
-                color="warning"
+                color="#efc251"
                 hide-details
+                id="CartConfirmCheckbox"
               ></v-checkbox>
               <div>
                 <v-btn
+                  id="BtnCartConfirm"
                   :disabled="!checkbox"
-                  color="warning"
+                  color="#efc251"
                   @click="finalizar"
                   large
                   class="my-1"
@@ -47,7 +49,10 @@
     <v-container class="cart_total elevation-5 rounded-l-xl pa-2">
       <h2>TOTAL</h2>
       <v-divider />
-      <h5>Cantidad de productos: {{ cantidadProductos }}</h5>
+      <h5>
+        Cantidad de productos:
+        <span id="CantidadProductos">{{ cantidadProductos }}</span>
+      </h5>
       <v-divider />
       <h5>Subtotal: ${{ subtotal }}</h5>
       <h5 v-show="entrega">Envío: $3.500</h5>
@@ -57,28 +62,39 @@
       <v-container>
         <h5>Forma de entrega:</h5>
         <v-radio-group dark row v-model="entrega" mandatory>
-          <v-radio label="Retiro" :value="false"></v-radio>
-          <v-radio label="Despacho a domicilio" :value="true"></v-radio>
+          <v-radio id="CartRetiro" label="Retiro" :value="false"></v-radio>
+          <v-radio
+            id="CartTransferencia"
+            label="Despacho a domicilio"
+            :value="true"
+          ></v-radio>
         </v-radio-group>
         <v-divider inset></v-divider>
         <h5>Datos cliente</h5>
         <v-text-field
+          id="CartNombre"
           dark
           outlined
           dense
           label="Nombre"
           v-model="nombre"
           type="text"
+          :rules="nameRules"
+          validate-on-blur
         ></v-text-field>
         <v-text-field
+          id="CartApellidos"
           dark
           outlined
           dense
           label="Apellidos"
+          :rules="lastnameRules"
           v-model="apellidos"
           type="text"
+          validate-on-blur
         ></v-text-field>
         <v-text-field
+          id="CartEmail"
           dense
           dark
           outlined
@@ -86,9 +102,11 @@
           label="Correo electrónico"
           v-model="email"
           required
+          validate-on-blur
         >
         </v-text-field>
         <v-text-field
+          id="CartTelefono"
           dark
           outlined
           dense
@@ -96,27 +114,35 @@
           type="number"
           prefix="+56"
           v-model="telefono"
+          :rules="phoneRules"
+          validate-on-blur
         ></v-text-field>
         <v-divider inset></v-divider>
         <div v-show="entrega">
           <h5>Dirección de entrega</h5>
           <v-select
+            id="CartDireccionComuna"
             dark
             dense
             outlined
             label="Comuna"
             :items="comunas"
             v-model="comuna"
+            data-cy="SelectComuna"
           ></v-select>
           <v-text-field
+            id="CartDireccionCalle"
             dark
             outlined
             dense
             label="Calle"
             type="text"
             v-model="calle"
+            :rules="required"
+            validate-on-blur
           ></v-text-field>
           <v-text-field
+            id="CartDireccionNumero"
             dark
             outlined
             dense
@@ -124,8 +150,11 @@
             type="number"
             prefix="#"
             v-model="numero"
+            :rules="required"
+            validate-on-blur
           ></v-text-field>
           <v-text-field
+            id="CartDireccionDepartamento"
             dark
             outlined
             dense
@@ -137,12 +166,17 @@
         </div>
         <h5>Medio de pago</h5>
         <v-radio-group dark row mandatory v-model="medioDePago">
-          <v-radio label="Efectivo" :value="false"></v-radio>
-          <v-radio label="Transferencia" :value="true"></v-radio>
+          <v-radio id="CartEfectivo" label="Efectivo" :value="false"></v-radio>
+          <v-radio
+            id="CartTransferencia"
+            label="Transferencia"
+            :value="true"
+          ></v-radio>
         </v-radio-group>
         <v-divider inset></v-divider>
         <h5>Comentarios</h5>
         <v-textarea
+          id="CartComentario"
           dark
           dense
           outlined
@@ -153,7 +187,13 @@
       </v-container>
       <v-divider />
       <div class="text-center py-3">
-        <v-btn x-large light color="#fff" @click="confirmar"
+        <v-btn
+          x-large
+          light
+          color="#fff"
+          @click="confirmar"
+          id="BtnCart"
+          :disabled="disabledBTN"
           >Finalizar pedido</v-btn
         >
       </div>
@@ -200,12 +240,29 @@ export default {
         "Santiago",
         "Vitacura",
       ],
+      nameRules: [
+        (v) => !!v || "Nombre requerido",
+        (v = "") =>
+          v.length >= 3 || "El nombre debe contener al menos 3 caracteres",
+        (v = "") =>
+          v.length <= 30 || "El nombre debe contener máximo 30 caracteres",
+      ],
+      lastnameRules: [
+        (v) => !!v || "Campo requerido",
+        (v = "") =>
+          v.length >= 8 || "Los apellidos deben contener al menos 8 caracteres",
+      ],
       emailRules: [
         (v) => !!v || "Correo electrónico requerido",
         (v) =>
           /.+@.+/.test(v) ||
           "El formato del correo electrónico ingresado no es válido",
       ],
+      phoneRules: [
+        (v) => !!v || "Teléfono requerido",
+        (v) => v.length == 9 || "Formato del teléfono no válido",
+      ],
+      required: [(v) => !!v || "Campo requerido"],
       //Datos
       entrega: false,
       medioDePago: true,
@@ -269,17 +326,26 @@ export default {
       this.pedido = pedido;
       this.modalFinalizar = true;
     },
-    finalizar() {
-      this.pedidoFinalizado(this.pedido);
-      this.$router.push("/Pedido-realizado");
-      this.carrito.forEach((p) => {
-        this.quitarDelCarrito(p.id);
-      });
-      this.modalFinalizar = true;
+    async finalizar() {
+      let finalizar = await this.pedidoFinalizado(this.pedido);
+
+      if (finalizar) {
+        this.$router.push("/Pedido-realizado");
+        this.carrito.forEach((p) => {
+          this.quitarDelCarrito(p.id);
+        });
+        this.modalFinalizar = true;
+      } else {
+        this.$toast.error(`${this.errorMessage}`, {
+          position: "top",
+          duration: 3000,
+          dismissible: true,
+        });
+      }
     },
   },
   computed: {
-    ...mapState("Cart", ["carrito"]),
+    ...mapState("Cart", ["carrito", "errorMessage"]),
     ...mapGetters(["precioEnMiles"]),
     ...mapGetters("Cart", ["cantidadProductos", "subtotal"]),
     total() {
@@ -301,6 +367,21 @@ export default {
     },
     medioEntrega() {
       return this.entrega ? "Despacho a domicilio" : "Retiro en tienda";
+    },
+    disabledBTN() {
+      if (
+        this.nombre == "" ||
+        this.apellidos == "" ||
+        this.email == "" ||
+        this.telefono == ""
+      )
+        return true;
+      else if (
+        this.entrega == true &&
+        (this.calle == "" || this.numero == "" || this.comuna == "")
+      )
+        return true;
+      else return false;
     },
   },
 };

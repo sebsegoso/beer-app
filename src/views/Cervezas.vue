@@ -7,10 +7,10 @@
     </div>
 
     <!--FILTROS -->
-    <div class="products_filter rounded-b-xl">
+    <div class="products_filter rounded-b-xl elevation-10">
       <v-container class="mx-auto">
-        <v-row class="align-center">
-          <v-col>
+        <v-row class=" d-flex align-center justify-lg-space-around">
+          <v-col cols="6">
             <v-select
               v-model="select"
               label="Ordenar por..."
@@ -20,17 +20,19 @@
               light
             ></v-select>
           </v-col>
-          <v-divider vertical light></v-divider>
           <!-- BUSCADOR -->
-          <v-col>
+          <v-col cols="6">
             <v-text-field
               dense
               light
               solo
               outlined
               label="Buscar cerveza, cervecería o estilo..."
-              prepend-icon="mdi-magnify"
+              append-icon="mdi-magnify"
               v-model="busqueda"
+              type="search"
+              id="BuscadorCervezas"
+              clearable
             ></v-text-field>
           </v-col>
         </v-row>
@@ -40,7 +42,10 @@
     <!-- CERVEZAS -->
     <v-container class="pag_body pa-md-1 mx-auto pa-0">
       <v-row>
-        <v-col v-for="(cerveza, i) in buscar" :key="i" cols="6" :md="3" :xl="2">
+      <!--v-if-->
+        <h2  v-if="buscar.length == 0 && busqueda !== '' " class="text-center">No hay cervezas que coincidan con "{{ busqueda }}"</h2>
+      <!--v-else-->
+        <v-col v-else v-for="(cerveza, i) in buscar" :key="i" cols="6" :md="3" :xl="2">
           <Card :producto="cerveza" />
         </v-col>
       </v-row>
@@ -74,7 +79,10 @@ export default {
     ...mapState("Products", ["cervezas"]),
     ...mapGetters("Products", ["resultadoBusqueda", "cervezasConStock"]),
     buscar() {
+      this.busqueda === null ? this.busqueda = "" : false
+
       let productos = this.resultadoBusqueda(this.busqueda);
+
       let ordenarPorNombre = (a, b) => {
         if (a.data.nombre > b.data.nombre) {
           return 1;
@@ -100,16 +108,13 @@ export default {
       }
       if (this.select == "Nombre Z-A") {
         return productos.sort(ordenarPorNombre).reverse();
-      } 
+      }
       if (this.select == "Precios de menor a mayor") {
         return productos.sort(ordenarPorPrecio);
       }
       if (this.select == "Precios de mayor a menor") {
         return productos.sort(ordenarPorPrecio).reverse();
-      }
-      
-      
-      else return productos;
+      } else return productos;
     },
   },
   title() {
@@ -124,5 +129,11 @@ export default {
 .products_filter {
   background-color: $main-white;
   color: $main-black;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  div {
+    padding: 2px 1px 1px 1px;
+  }
 }
 </style>

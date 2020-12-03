@@ -4,6 +4,7 @@
       class="card_product ma-md-3 rounded-xl elevation-5 d-flex flex-column justify-space-around"
       dark
       width="100%"
+      :id="`DetalleProducto${producto.data.codigo}`"
     >
       <v-container class="pa-1">
         <div>
@@ -17,7 +18,7 @@
               aspect-ratio="1"
             ></v-img>
 
-            <v-card-title>{{ producto.data.nombre }} </v-card-title>
+            <v-card-title class="card_title">{{ producto.data.nombre }} </v-card-title>
             <v-card-subtitle class="pb-1" v-if="producto.data.cerveceria">
               <router-link :to="`/cervezas/${producto.data.cerveceria}`">{{
                 producto.data.cerveceria
@@ -54,8 +55,9 @@
               light
               color="#fff"
               width="80%"
-              class="elevation-10 rounded-xl"
+              class="elevation-10 rounded-xl "
               @click="anadirAlCarrito(producto.id)"
+              :id="`BtnCard${producto.data.codigo}`"
             >
               <v-icon>mdi-plus</v-icon>
               Añadir
@@ -114,6 +116,10 @@ export default {
   animation-name: fadein;
   animation-duration: 1.5s;
   animation-timing-function: ease;
+  &_title{
+    font-size: 1rem;
+    font-weight: 900;
+  }
   &_price {
     text-shadow: 0 0 4px $main-black, 0 0 2px $main-black, 0 0 8px $main-yellow;
   }

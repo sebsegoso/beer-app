@@ -19,6 +19,8 @@
                 dark
                 required
                 id="EmailLogin"
+                autofocus
+                validate-on-blur
               ></v-text-field>
             </v-col>
             <!--INPUT PASSWORD-->

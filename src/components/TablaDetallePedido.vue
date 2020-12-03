@@ -4,7 +4,7 @@
       <tr v-if="pedido.id">
         <th class="text-right">CÓDIGO DE COMPRA:</th>
         <td>
-          <b class="codigo">{{ pedido.id }}</b>
+          <b id="OrderId" class="codigo">{{ pedido.id }}</b>
         </td>
       </tr>
       <tr>

@@ -14,9 +14,7 @@ const routes = [
   {
     path: '/cervezas',
     name: 'Cervezas',
-    component: () => import(/* webpackChunkName: "Cervezas" */ '../views/Cervezas.vue'),
-
-
+    component: () => import(/* webpackChunkName: "Cervezas" */ '../views/Cervezas.vue')
   },
   {
     path: '/cervezas/:cerveceria',
@@ -47,12 +45,12 @@ const routes = [
 
   },
   {
-    path: '/admin',
-    name: 'Admin',
+    path: '/admin/productos',
+    name: 'Productos',
     meta: {
       login: true
     },
-    component: () => import(/* webpackChunkName: "Admin" */ '../views/Admin/')
+    component: () => import(/* webpackChunkName: "Productos" */ '../views/Admin/Productos.vue')
   },
   {
     path: '/admin/comentarios',
@@ -79,6 +77,10 @@ const routes = [
     component: () => import(/* webpackChunkName: "CrearUsuario" */ '../views/Admin/CrearUsuario.vue')
   },
   {
+    path: '/admin',
+    redirect: '/admin/pedidos'
+  },
+  {
     path: '*',
     name: 'NotFound',
     component: () => import(/* webpackChunkName: "NotFound" */ '../views/NotFound.vue')
@@ -92,6 +94,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  scrollTo(0, 0)
   let user = firebase.auth().currentUser;
   let authRequired = to.matched.some(route => route.meta.login);
 

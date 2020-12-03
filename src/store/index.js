@@ -25,6 +25,10 @@ export default new Vuex.Store({
   },
   getters: {
     precioEnMiles: () => (numero) => {
+      if(numero === undefined) {
+        numero = 0
+      }
+
       return numero
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ".");

@@ -22,7 +22,7 @@
           <div class="wrapper_variedad_precio">
             <h3>
               {{ cerveza.data.nombre }}
-              <span class="cerveza_content_volumen">(350cc)</span>
+              <span class="cerveza_content_volumen">({{cerveza.data.volumen}}cc)</span>
             </h3>
             <h2>${{ precio }}</h2>
           </div>
@@ -61,6 +61,7 @@
             @click="anadirAlCarrito(cerveza.id)"
             class="elevation-5"
             x-large
+            id="AgregarProducto"
             ><v-icon>mdi-cart</v-icon> Agregar a mi carro</v-btn
           >
           <v-btn
@@ -69,6 +70,7 @@
             class="elevation-5"
             x-large
             dark
+            id="ProductoAgregado"
             ><v-icon>mdi-check</v-icon> Producto agregado al carro</v-btn
           >
         </v-col>

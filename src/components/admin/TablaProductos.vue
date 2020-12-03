@@ -14,16 +14,17 @@
       :items="cervezas"
       :items-per-page="10"
       class="elevation-10 rounded-lg"
+      id="TablaProductos"
     >
       <!--BOTONES -->
-      <template v-slot:item.acciones="{ item }">
+      <template v-slot:item.acciones="{ item }" >
         <!--EDITAR -->
-        <v-btn color="primary" small @click="editarProducto(item)">
+        <v-btn color="primary" small @click="editarProducto(item)" :class="`EditarProducto${item.data.codigo}`">
           <v-icon dark> mdi-pencil </v-icon>
         </v-btn>
         <!-- BORRAR -->
 
-        <v-btn color="red" small @click="borrarProducto(item)">
+        <v-btn color="red" small @click="borrarProducto(item)" :class="`BorrarProducto${item.data.codigo}`">
           <v-icon dark> mdi-trash-can-outline </v-icon>
         </v-btn>
       </template>

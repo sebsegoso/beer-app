@@ -20,8 +20,6 @@ export default {
         //AUTH
         LOG_IN(state, user) {
             state.usuario = user;
-            console.log(state.usuario)
-
         },
         LOG_OUT(state) {
             state.usuario = ''
@@ -86,29 +84,43 @@ export default {
             }
         },
         //PEDIDOS
-        getPedidos({ commit }) {
-            firebase
-                .firestore()
-                .collection('pedidos')
-                .onSnapshot(snapshot => {
-                    let pedidos = []
-                    snapshot.forEach(comentario => {
-                        pedidos.push({
-                            data: comentario.data(),
-                            id: comentario.id
+        async getPedidos({ commit }) {
+            try {
+                let getPedidos = await firebase
+                    .firestore()
+                    .collection('pedidos')
+                    .onSnapshot(snapshot => {
+                        let pedidos = []
+                        snapshot.forEach(comentario => {
+                            pedidos.push({
+                                data: comentario.data(),
+                                id: comentario.id
+                            })
                         })
+
+                        commit("GET_ORDERS", pedidos)
                     })
 
-                    commit("GET_ORDERS", pedidos)
-                })
+                return true
+            } catch (error) {
+                commit('ERROR', error.message)
+                return false
+            }
         },
-        async pedidoEntregado({ commit }, id) {
+        async pedidoEntregado({ commit, state }, id) {
             try {
+                const nombreUsuario = state.usuario.name
+                let historial = []
+                historial.push({
+                    deliveredBy: nombreUsuario
+                })
+
+
                 await firebase
                     .firestore()
                     .collection('pedidos')
                     .doc(id)
-                    .update({ entregado: true });
+                    .update({ entregado: true, meta: historial });
 
                 return true
             } catch (error) {
@@ -131,21 +143,27 @@ export default {
             }
         },
         //COMENTARIOS-------------------
-        getComments({ commit }) {
-            firebase
-                .firestore()
-                .collection('comentarios')
-                .onSnapshot(snapshot => {
-                    let comentarios = []
-                    snapshot.forEach(comentario => {
-                        comentarios.push({
-                            data: comentario.data(),
-                            id: comentario.id
+        async getComments({ commit }) {
+            try {
+                await firebase
+                    .firestore()
+                    .collection('comentarios')
+                    .onSnapshot(snapshot => {
+                        let comentarios = []
+                        snapshot.forEach(comentario => {
+                            comentarios.push({
+                                data: comentario.data(),
+                                id: comentario.id
+                            })
                         })
-                    })
 
-                    commit("GET_COMMENTS", comentarios)
-                })
+                        commit("GET_COMMENTS", comentarios)
+                    })
+                return true
+            } catch (error) {
+                commit('ERROR', error.message)
+                return false
+            }
         },
         async deleteComment({ commit }, id) {
             try {
@@ -173,7 +191,8 @@ export default {
                 let usuarioAFirestore = await firebase
                     .firestore()
                     .collection('usuarios')
-                    .add(user)
+                    .add(user);
+
                 return true
             } catch (error) {
                 commit('ERROR', error.message)
@@ -196,7 +215,7 @@ export default {
                     commit("LOG_IN", doc.data());
                 });
 
-                router.push({ name: 'Admin' })
+                router.push({ name: 'Pedidos' })
                 return true;
             }
             catch (error) {

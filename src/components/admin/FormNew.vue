@@ -1,153 +1,178 @@
 <template>
-  <v-form ref="addProduct">
-    <v-row>
-      <v-col cols="6">
-        <v-text-field
-          dense
-          v-model="newBeer.nombre"
-          label="Nombre"
-          required
-          outlined
-        />
-      </v-col>
-      <v-col cols="6">
-        <v-text-field
-          dense
-          v-model="newBeer.cerveceria"
-          label="Cervecería"
-          required
-          outlined
-        />
-      </v-col>
-      <v-col cols="4" md="3">
-        <v-text-field
-          dense
-          v-model="newBeer.codigo"
-          label="Código"
-          required
-          outlined
-        />
-      </v-col>
-      <v-col cols="8" md="5">
-        <v-text-field
-          dense
-          v-model="newBeer.estilo"
-          label="Estilo"
-          required
-          outlined
-        />
-      </v-col>
-      <v-col cols="6" md="4">
-        <v-text-field
-          dense
-          v-model="newBeer.origen"
-          label="Origen"
-          required
-          outlined
-        />
-      </v-col>
-      <v-col cols="3" md="2">
-        <v-text-field
-          dense
-          type="number"
-          v-model="newBeer.ABV"
-          label="ABV"
-          suffix="%"
-          required
-          outlined
-        />
-      </v-col>
-      <v-col cols="3" md="2">
-        <v-text-field
-          dense
-          type="number"
-          v-model="newBeer.IBU"
-          label="IBU"
-          required
-          outlined
-        />
-      </v-col>
-      <v-col cols="12" md="6">
-        <v-text-field
-          dense
-          v-model="newBeer.foto"
-          label="Foto"
-          required
-          outlined
-        />
-      </v-col>
-      <v-col cols="4" md="2">
-        <v-text-field
-          dense
-          type="number"
-          v-model="newBeer.volumen"
-          label="Volumen"
-          suffix="cc"
-          required
-          outlined
-        />
-      </v-col>
-      <v-col cols="4" md="1">
-        <v-text-field
-          dense
-          type="number"
-          v-model="newBeer.stock"
-          label="Stock"
-          required
-          outlined
-        />
-      </v-col>
-      <v-col cols="4" md="2">
-        <v-text-field
-          dense
-          type="number"
-          v-model="newBeer.precio"
-          label="Precio"
-          prefix="$"
-          required
-          outlined
-        />
-      </v-col>
-      <v-col cols="5" md="2">
-        <v-text-field
-          dense
-          type="text"
-          v-model="newBeer.path"
-          label="Path"
-          prefix="/"
-          required
-          outlined
-        />
-      </v-col>
-      <v-col cols="7" md="3">
-        <v-radio-group row v-model="newBeer.nueva" mandatory class="d-flex">
-          <span>Nueva?</span>
-          <v-radio label="Sí" :value="true"></v-radio>
-          <v-radio label="No" :value="false"></v-radio>
-        </v-radio-group>
-      </v-col>
-      <v-col cols="12" md="4">
-        <v-textarea
-          v-model="newBeer.resena"
-          label="Reseña"
-          rows="1"
-          required
-          outlined
-          dense
-        />
-      </v-col>
+  <div>
+    <v-divider></v-divider>
+    <v-form ref="addProduct">
+      <v-row>
+        <v-col cols="6">
+          <v-text-field
+            dense
+            v-model="newBeer.nombre"
+            label="Nombre"
+            required
+            outlined
+            id="NewProductNombre"
+          />
+        </v-col>
+        <v-col cols="6">
+          <v-text-field
+            dense
+            v-model="newBeer.cerveceria"
+            list="cervecerias"
+            label="Cervecería"
+            required
+            outlined
+            id="NewProductCerveceria"
+          />
+        </v-col>
+        <v-col cols="4" md="3">
+          <v-text-field
+            dense
+            v-model="newBeer.codigo"
+            label="Código"
+            required
+            outlined
+            id="NewProductCodigo"
+          />
+        </v-col>
+        <v-col cols="8" md="5">
+          <v-text-field
+            dense
+            v-model="newBeer.estilo"
+            label="Estilo"
+            required
+            outlined
+            id="NewProductEstilo"
+          />
+        </v-col>
+        <v-col cols="6" md="4">
+          <v-text-field
+            dense
+            v-model="newBeer.origen"
+            label="Origen"
+            required
+            outlined
+            id="NewProductOrigen"
+          />
+        </v-col>
+        <v-col cols="3" md="2">
+          <v-text-field
+            dense
+            type="number"
+            v-model="newBeer.ABV"
+            label="ABV"
+            suffix="%"
+            required
+            outlined
+            id="NewProductABV"
+          />
+        </v-col>
+        <v-col cols="3" md="2">
+          <v-text-field
+            dense
+            type="number"
+            v-model="newBeer.IBU"
+            label="IBU"
+            required
+            outlined
+            id="NewProductIBU"
+          />
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+            dense
+            v-model="newBeer.foto"
+            label="Foto"
+            required
+            outlined
+            id="NewProductFoto"
+            type="url"
+          />
+        </v-col>
+        <v-col cols="4" md="2">
+          <v-text-field
+            dense
+            type="number"
+            v-model="newBeer.volumen"
+            label="Volumen"
+            suffix="cc"
+            required
+            outlined
+            id="NewProductVolumen"
+          />
+        </v-col>
+        <v-col cols="4" md="1">
+          <v-text-field
+            dense
+            type="number"
+            v-model="newBeer.stock"
+            label="Stock"
+            required
+            outlined
+            id="NewProductStock"
+          />
+        </v-col>
+        <v-col cols="4" md="2">
+          <v-text-field
+            dense
+            type="number"
+            v-model="newBeer.precio"
+            label="Precio"
+            prefix="$"
+            required
+            outlined
+            id="NewProductPrecio"
+          />
+        </v-col>
+        <v-col cols="5" md="2">
+          <v-text-field
+            dense
+            type="text"
+            v-model="newBeer.path"
+            label="Path"
+            prefix="/"
+            required
+            outlined
+            id="NewProductPath"
+          />
+        </v-col>
+        <v-col cols="7" md="3">
+          <v-radio-group row v-model="newBeer.nueva" mandatory class="d-flex">
+            <span>Nueva?</span>
+            <v-radio label="Sí" :value="true"></v-radio>
+            <v-radio label="No" :value="false"></v-radio>
+          </v-radio-group>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-textarea
+            v-model="newBeer.resena"
+            label="Reseña"
+            rows="1"
+            required
+            outlined
+            id="NewProductResena"
+            dense
+          />
+        </v-col>
 
-      <v-col cols="12">
-        <v-btn
-          color="success"
-          @click="agregarCerveza"
-          :disabled="disabledBoton"
-        >
-          <v-icon>mdi-plus</v-icon> Agregar
-        </v-btn>
-      </v-col>
-    </v-row>
-  </v-form>
+        <v-col cols="12">
+          <v-btn
+            color="success"
+            @click="agregarCerveza"
+            :disabled="disabledBoton"
+            id="BtnNewProduct"
+          >
+            <v-icon>mdi-plus</v-icon> Agregar
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-form>
+
+    <datalist id="cervecerias">
+      <option v-for="(cerveceria, i) in cervecerias">
+        {{ cerveceria.data.nombre }}
+      </option>
+    </datalist>
+  </div>
 </template>
 
 <script>
@@ -219,6 +244,7 @@ export default {
   },
   computed: {
     ...mapState("Admin", ["usuario", "errorMessage"]),
+    ...mapState("Products", ["cervecerias"]),
     fecha() {
       let date = new Date();
       let fecha =
@@ -227,7 +253,7 @@ export default {
     },
     disabledBoton() {
       if (
-          this.newBeer.codigo == undefined ||
+        this.newBeer.codigo == undefined ||
         this.newBeer.nombre == undefined ||
         this.newBeer.cerveceria == undefined ||
         this.newBeer.estilo == undefined ||

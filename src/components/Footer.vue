@@ -26,6 +26,7 @@
                   <v-row>
                     <v-col cols="12" md="6">
                       <v-text-field
+                      id="FooterFormName"
                         dense
                         light
                         outlined
@@ -40,6 +41,7 @@
 
                     <v-col cols="12" md="6">
                       <v-text-field
+                      id="FooterFormEmail"
                         dense
                         light
                         outlined
@@ -54,6 +56,7 @@
 
                     <v-col cols="12">
                       <v-textarea
+                      id="FooterFormComment"
                         dense
                         light
                         outlined
@@ -67,7 +70,7 @@
                       ></v-textarea>
                     </v-col>
                   </v-row>
-                  <v-btn :disabled="formDisabled" @click="enviarComentario"
+                  <v-btn :disabled="formDisabled" @click="enviarComentario" id="BtnFooterForm"
                     >Enviar</v-btn
                   >
                 </v-form>
@@ -138,7 +141,7 @@ export default {
       if (validacion) {
         await this.sendFeedback(comentario);
         this.$toast.success("Mensaje enviado", {
-          position: "bottom",
+          position: "top",
           duration: 3000,
           dismissible: true,
         });

@@ -7,14 +7,24 @@
   }
 }
 
-@keyframes intermitente {
+@keyframes bgColorChange {
   0% {
-    color: inherit;
+    background-color: $main-white;
   }
-  50% {
-    color: $main-white;
+  60%{
+    background-color: $main-yellow;
+  }
+  
+  100% {
+    background-color: $main-black;
+  }
+}
+
+@keyframes scale {
+  0% {
+    transform: scale(0);
   }
   100% {
-    color: inherit;
+    transform: scale(1);
   }
 }

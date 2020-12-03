@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="pag_header">
-      <h1>Mi carro</h1>
+      <v-container>
+        <h1>Mi carro</h1>
+      </v-container>
     </div>
     <v-container class="pag_body mx-auto py-4">
       <div

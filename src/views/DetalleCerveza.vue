@@ -5,14 +5,14 @@
     </div>
     <v-container class="pag_body pa-md-1 mx-auto">
       <v-row align="start" class="cerveza_content">
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="4" class="cerveza_content_pic">
           <v-img
             class="ml-auto rounded-xl cerveza_content_img"
             width="100%"
             :src="cerveza.data.foto"
           />
         </v-col>
-        <v-col cols="12" md="8">
+        <v-col cols="12" md="8" class="cerveza_content_text">
           <router-link
             :to="`/cervezas/${cerveza.data.cerveceria}`"
             class="cerveza_content_link"
@@ -138,6 +138,16 @@ export default {
   &_volumen {
     font-size: 1.125rem;
     font-weight: 500;
+  }
+
+  &_pic{
+    animation-name: scale;
+    animation-duration: .6s;
+  }
+  &_text{
+    animation-name: fadein;
+    animation-duration: 1s;
+
   }
 }
 

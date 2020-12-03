@@ -1,32 +1,38 @@
 //ESTILOS GENERALES
 * {
-    margin: 0;
-    box-sizing: border-box;
-    a {
-        text-decoration: none;
-    }
-    
+  margin: 0;
+  box-sizing: border-box;
+  a {
+    text-decoration: none;
+  }
 }
 
-#App{
-    background-color: $main-yellow;
-    color: $main-black;
-    font-family: 'Ubuntu' , sans-serif;
-    min-height: 100vh;
-    scroll-behavior: smooth;
-
-
+#App {
+  background-color: $main-yellow;
+  color: $main-black;
+  font-family: "Ubuntu", sans-serif;
+  min-height: 100vh;
+  scroll-behavior: smooth;
 }
 
 .pag_header {
-    background-color: #16181e;
-    color: #FFF;
-    min-height: 80px;
-    padding-top: 15px;
-    text-align: center;
-    width: 100vw;
-    div {
-        margin: 0 auto;
-    }
-}
+  background-color: #16181e;
+  color: #fff;
+  min-height: 80px;
+  padding-top: 15px;
+  text-align: center;
+  width: 100vw;
 
+  animation: bgColorChange;
+  animation-duration: .3s;
+  animation-timing-function: ease;
+
+  div {
+    margin: 0 auto;
+    h1{
+        animation-name: fadein;
+        animation-duration: .7s;
+        animation-timing-function: ease;
+    }
+  }
+}

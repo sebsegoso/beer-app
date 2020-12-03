@@ -5,7 +5,7 @@
     </div>
     <!--MAIN -->
     <v-main>
-      <router-view />
+        <router-view />
     </v-main>
     <!--FOOTER -->
     <Footer v-if="!admin" />
@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     ...mapActions("Products", ["getData", "getCervecerias", "errorMessagePr"]),
-    ...mapActions("Admin", ["getComments", "getPedidos" , "errorMessage"]),
+    ...mapActions("Admin", ["getComments", "getPedidos", "errorMessage"]),
     // ...mapMutations(['LOADING' , 'NOT_LOADING'])
   },
   async created() {

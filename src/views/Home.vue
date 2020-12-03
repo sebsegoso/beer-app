@@ -1,45 +1,40 @@
 <template>
   <div>
-    <div class="pag_header">
+    <div class="pag_header pag_header_home">
       <v-container>
         <h1>Las mejores cervezas artesanales, directo a tu puerta</h1>
       </v-container>
     </div>
-    <!--LOADER -->
-    <fulfilling-bouncing-circle-spinner
-      :animation-duration="4000"
-      :size="60"
-      color="#000"
-      v-if="loading"
-    />
     <!--CARRUSEL -->
-    <div v-else>
+    <div>
       <v-carousel cycle hide-delimiters show-arrows-on-hover>
-        <v-carousel-item v-for="(n, i) in 2" :key="i" height="150">
-          <v-sheet
-            width="100%"
-            height="100%"
-            :style="{
-              backgroundImage:
-                'url(https://st4.depositphotos.com/5389310/19992/v/1600/depositphotos_199920628-stock-illustration-wheat-beer-ads-flying-ingredients.jpg)',
-            }"
-          >
-            <v-container class="d-flex flex-column justify-center">
-              <h2>Beba menos, beba mejor</h2>
-              <h3>Elige artesanal.</h3>
-              <v-btn class="text-center" to="/Cervezas" x-large dark elevation="5"
-                >Ver todas las cervezas <v-icon>mdi-beer</v-icon>
-              </v-btn>
-            </v-container>
-          </v-sheet>
+        <v-carousel-item>
+          <Banner
+            bgImage="https://firebasestorage.googleapis.com/v0/b/beer-app-2020.appspot.com/o/assets%2Fbanner.jpg?alt=media&token=74c24772-07e5-4561-a055-37ebe03cd232"
+            title="Beba menos, beba mejor"
+            subtitle="Elige artesanal."
+            btn-text="Ver todas las cervezas "
+            btn-icon="mdi-beer"
+            btn-link="/Cervezas"
+          />          
         </v-carousel-item>
+        <v-carousel-item>
+          <Banner
+            bgImage="https://firebasestorage.googleapis.com/v0/b/beer-app-2020.appspot.com/o/assets%2Fbannerheyhops.jpg?alt=media&token=42688974-1735-40a7-8835-be1d38b9c8fe"
+            title="COLABORA O MUERE"
+            subtitle="HEY HOPS LET'S GO - Desatino x Zutik"
+            btn-text="Ver cerveza"
+            btn-icon="mdi-beer"
+            btn-link="/Cervezas/Desatino/HeyHopsLetsGO"
+          />          
+        </v-carousel-item>        
       </v-carousel>
-      
+
       <v-container class="pa-7 pa-md-1 mx-auto">
         <!-- SLIDES -->
-      
+
         <h2 class="text-center">Cervezas nuevas</h2>
-      
+
         <v-slide-group
           class="main_slide pa-4"
           show-arrows="desktop"
@@ -54,9 +49,9 @@
             <Card :producto="cerveza" />
           </v-slide-item>
         </v-slide-group>
-      
+
         <v-divider light class="my-15" />
-      
+
         <h2 class="text-center">Cervecerías</h2>
         <v-slide-group
           class="main_slide pa-4"
@@ -75,9 +70,9 @@
             </v-slide-item>
           </div>
         </v-slide-group>
-      
+
         <v-divider light class="my-15" />
-      
+
         <div class="text-center py-5">
           <v-btn class="text-center" to="/Cervezas" x-large dark elevation="5"
             >Ver todas las cervezas <v-icon>mdi-beer</v-icon>
@@ -90,15 +85,15 @@
 </template>
 
 <script>
-import { FulfillingBouncingCircleSpinner } from "epic-spinners";
 import { mapState, mapGetters } from "vuex";
-// @ is an alias to /src
 import Card from "@/components/Card";
+import Banner from "@/components/Banner";
 
 export default {
   name: "Home",
   components: {
-    Card,FulfillingBouncingCircleSpinner
+    Card,
+    Banner,
   },
   data() {
     return {
@@ -112,19 +107,19 @@ export default {
   computed: {
     ...mapGetters("Products", ["cervezasNuevas", "cervecerias"]),
     ...mapState("Products", ["cervecerias"]),
-    ...mapState(["loading"]),
   },
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@/assets/scss/main.scss";
-
 .main_slide {
   padding: 4rem auto;
 
   .cerveceria_img {
     width: 180px;
+    animation-name: scale;
+    animation-duration: 1s;
     transition: filter 0.5s;
     filter: drop-shadow(0 0 0 1 $main-black);
 

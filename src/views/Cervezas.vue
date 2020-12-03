@@ -127,6 +127,8 @@ export default {
 @import "@/assets/scss/main.scss";
 
 .products_filter {
+  animation-name: scale;
+  animation-duration: .5s;
   background-color: $main-white;
   color: $main-black;
   position: sticky;

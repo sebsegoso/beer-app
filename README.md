@@ -1,5 +1,7 @@
 # beer-app
 Demo: https://beer-app-2020.web.app/
+
+Vue cli , vuetify , firebase , vue-toast-notification
 ## Project setup
 ```
 yarn install

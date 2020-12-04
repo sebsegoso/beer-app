@@ -1,5 +1,5 @@
 # beer-app
-
+Demo: https://beer-app-2020.web.app/
 ## Project setup
 ```
 yarn install
@@ -13,6 +13,11 @@ yarn serve
 ### Compiles and minifies for production
 ```
 yarn build
+```
+
+### For deploy
+```
+firebase deploy --only hosting
 ```
 
 ### Run your unit tests

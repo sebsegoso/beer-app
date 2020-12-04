@@ -12,7 +12,7 @@
       dense
       :headers="headers"
       :items="cervezas"
-      :items-per-page="10"
+      :items-per-page="30"
       class="elevation-10 rounded-lg"
       id="TablaProductos"
     >
